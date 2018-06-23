@@ -1,12 +1,11 @@
 #pragma once
 
-#include "input_lib/key.hpp"
 #include <map>
 
 namespace InputLib
 {
 template <typename K, typename V>
-class Map
+class Bimap
 {
     std::map<V, K> mKeyByValue;
     std::map<K, V> mValuesByKey;

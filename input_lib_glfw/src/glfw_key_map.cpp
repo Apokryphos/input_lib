@@ -1,15 +1,17 @@
+#include "input_lib/bimap.hpp"
 #include "input_lib/key.hpp"
-#include "input_lib/map.hpp"
 #include <GLFW/glfw3.h>
 
 namespace InputLib
 {
 //  ----------------------------------------------------------------------------
-void initializeGlfwKeyMap(Map<Key, int>& keyMap) {
+void initializeGlfwKeyMap(Bimap<Key, int>& keyMap) {
     keyMap.clear();
 
+    keyMap.map(Key::Enter, GLFW_KEY_ENTER);
     keyMap.map(Key::Escape, GLFW_KEY_ESCAPE);
     keyMap.map(Key::Space, GLFW_KEY_SPACE);
+    keyMap.map(Key::Up, GLFW_KEY_UP);
     //  Digits
     keyMap.map(Key::D0, GLFW_KEY_0);
     keyMap.map(Key::D1, GLFW_KEY_1);

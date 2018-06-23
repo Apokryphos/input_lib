@@ -7,6 +7,7 @@ enum class Key
     None,
 
     Down,
+    Enter,
     Escape,
     Left,
     Right,

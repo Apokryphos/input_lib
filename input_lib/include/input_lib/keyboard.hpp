@@ -12,5 +12,6 @@ public:
     virtual void bind(const Action action, const Key key) = 0;
     virtual double getAnalogValue(const Action action) = 0;
     virtual bool getDigitalValue(const Action action) = 0;
+    virtual bool isPressed(const Action action) = 0;
 };
 }

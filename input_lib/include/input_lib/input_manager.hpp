@@ -10,5 +10,6 @@ class InputManager
 public:
     virtual Mouse& getMouse() = 0;
     virtual Keyboard& getKeyboard() = 0;
+    virtual void update() = 0;
 };
 }

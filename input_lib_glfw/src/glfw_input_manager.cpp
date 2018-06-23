@@ -1,3 +1,4 @@
+#include "input_lib/bimap.hpp"
 #include "input_lib/glfw/glfw_input_manager.hpp"
 #include "input_lib/glfw/glfw_key_map.hpp"
 #include <GLFW/glfw3.h>
@@ -8,14 +9,14 @@
 namespace InputLib
 {
 static GlfwInputManager* sInputManager;
-static Map<Key, int> sKeyMap;
+static Bimap<Key, int> sKeyMap;
 
 //  ----------------------------------------------------------------------------
 static void updateKeyState(int glfwKey, const KeyState keyState) {
     auto& keyboard = sInputManager->getKeyboard();
-    auto& keyStates = static_cast<GlfwKeyboard&>(keyboard).getKeyState();
+    auto& keyStateMap = static_cast<GlfwKeyboard&>(keyboard).getKeyStateMap();
     const Key key = sKeyMap.getKey(glfwKey, Key::None);
-    keyStates.map(key, keyState);
+    keyStateMap.setState(key, keyState);
 }
 
 //  ----------------------------------------------------------------------------
@@ -31,8 +32,11 @@ void keyboardCallback(
 
     switch (action) {
         case GLFW_PRESS:
-        case GLFW_REPEAT:
             updateKeyState(key, KeyState::Pressed);
+            break;
+
+        case GLFW_REPEAT:
+            updateKeyState(key, KeyState::Down);
             break;
 
         case GLFW_RELEASE:
@@ -61,5 +65,14 @@ Mouse& GlfwInputManager::getMouse() {
 //  ----------------------------------------------------------------------------
 Keyboard& GlfwInputManager::getKeyboard() {
     return mKeyboard;
+}
+
+//  ----------------------------------------------------------------------------
+void GlfwInputManager::update() {
+    //  Update Pressed and Released states to Down and Up
+    auto& keyStateMap = mKeyboard.getKeyStateMap();
+    keyStateMap.update();
+
+    glfwPollEvents();
 }
 }

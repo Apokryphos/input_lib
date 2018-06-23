@@ -16,6 +16,7 @@ public:
     virtual ~GlfwInputManager();
     virtual Mouse& getMouse() override;
     virtual Keyboard& getKeyboard() override;
+    virtual void update() override;
 };
 
 void keyboardCallback(

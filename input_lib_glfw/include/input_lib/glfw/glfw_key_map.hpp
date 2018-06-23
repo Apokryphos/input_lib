@@ -1,8 +1,8 @@
 #pragma once
 
-#include "input_lib/map.hpp"
+#include "input_lib/bimap.hpp"
 
 namespace InputLib
 {
-void initializeGlfwKeyMap(Map<Key, int>& keyMap);
+void initializeGlfwKeyMap(Bimap<Key, int>& keyMap);
 }

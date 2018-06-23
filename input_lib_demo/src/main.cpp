@@ -7,6 +7,36 @@
 
 using namespace InputLib;
 
+enum class InputActionId
+{
+    Accept,
+    MoveUp,
+    Quit,
+};
+
+class InputActions
+{
+static void makeDigital(Action& action, const InputActionId actionId) {
+    action.id = static_cast<int>(actionId);
+    action.type = ActionType::Digital;
+}
+
+public:
+    static Action Accept;
+    static Action Quit;
+    static Action MoveUp;
+
+    static void initialize() {
+        makeDigital(Accept, InputActionId::Accept);
+        makeDigital(MoveUp, InputActionId::MoveUp);
+        makeDigital(Quit, InputActionId::Quit);
+    }
+};
+
+Action InputActions::Accept = {};
+Action InputActions::Quit = {};
+Action InputActions::MoveUp = {};
+
 //  ----------------------------------------------------------------------------
 static void error_callback(int error, const char* description)
 {
@@ -45,23 +75,28 @@ int main(void)
 
     GlfwInputManager inputManager;
 
-    const int ACTION_QUIT = 0;
-
     auto& keyboard = inputManager.getKeyboard();
 
-    Action quitAction = {};
-    quitAction.id = ACTION_QUIT;
-    quitAction.type = ActionType::Digital;
-
-    keyboard.bind(quitAction, Key::Escape);
+    InputActions::initialize();
+    keyboard.bind(InputActions::Accept, Key::Enter);
+    keyboard.bind(InputActions::MoveUp, Key::Up);
+    keyboard.bind(InputActions::Quit, Key::Escape);
 
     while (!glfwWindowShouldClose(window)) {
-        glfwPollEvents();
+        inputManager.update();
 
         auto& keyboard = inputManager.getKeyboard();
 
-        if (keyboard.getDigitalValue(quitAction)) {
+        if (keyboard.getDigitalValue(InputActions::Quit)) {
             glfwSetWindowShouldClose(window, GLFW_TRUE);
+        }
+
+        if (keyboard.isPressed(InputActions::Accept)) {
+            std::cout << "ACCEPT" << std::endl;
+        }
+
+        if (keyboard.getDigitalValue(InputActions::MoveUp)) {
+            std::cout << "MOVE UP" << std::endl;
         }
 
         float ratio;

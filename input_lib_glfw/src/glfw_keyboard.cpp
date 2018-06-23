@@ -10,19 +10,26 @@ void GlfwKeyboard::bind(const Action action, const Key key) {
 //  ----------------------------------------------------------------------------
 double GlfwKeyboard::getAnalogValue(const Action action) {
     const Key key = mActionMap.getValue(action);
-    const KeyState keyState = mKeyState.getValue(key, KeyState::Released);
+    const KeyState keyState = mKeyState.getState(key, KeyState::Released);
     return keyStateToAnalogValue(keyState);
 }
 
 //  ----------------------------------------------------------------------------
 bool GlfwKeyboard::getDigitalValue(const Action action) {
     const Key key = mActionMap.getValue(action);
-    const KeyState keyState = mKeyState.getValue(key, KeyState::Released);
+    const KeyState keyState = mKeyState.getState(key, KeyState::Released);
     return keyStateToDigitalValue(keyState);
 }
 
 //  ----------------------------------------------------------------------------
-Map<Key, KeyState>& GlfwKeyboard::getKeyState() {
+bool GlfwKeyboard::isPressed(const Action action) {
+    const Key key = mActionMap.getValue(action);
+    const KeyState keyState = mKeyState.getState(key, KeyState::Released);
+    return keyState == KeyState::Pressed;
+}
+
+//  ----------------------------------------------------------------------------
+KeyStateMap& GlfwKeyboard::getKeyStateMap() {
     return mKeyState;
 }
 }
