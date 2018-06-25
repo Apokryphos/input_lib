@@ -26,7 +26,7 @@ float ActionMap::getAnalogValue(
 
 //  ----------------------------------------------------------------------------
 float ActionMap::getAxisValue(const ActionId actionId, const Gamepad& gamepad) {
-    const Axis axis = mAxisByActionId.at(actionId);
+    const unsigned axis = mAxisByActionId.at(actionId);
     return gamepad.getAxisValue(axis);
 }
 
@@ -104,7 +104,7 @@ bool ActionMap::isPressed(
 }
 
 //  ----------------------------------------------------------------------------
-void ActionMap::mapAction(const ActionId actionId, const Axis axis) {
+void ActionMap::mapAction(const ActionId actionId, const unsigned axis) {
     mAxisByActionId.emplace(actionId, axis);
 }
 

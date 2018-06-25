@@ -73,9 +73,9 @@ int main(void)
     );
 
     actionMap.mapAction(InputActionId::Accept, Button::Button1);
-    actionMap.mapAction(InputActionId::Accelerate, Axis::Axis3);
+    actionMap.mapAction(InputActionId::Accelerate, 2);
     actionMap.mapAction(InputActionId::Crouch, Button::Button2);
-    actionMap.mapAction(InputActionId::MoveX, Axis::Axis1);
+    actionMap.mapAction(InputActionId::MoveX, 0);
 
 
     while (!glfwWindowShouldClose(window)) {

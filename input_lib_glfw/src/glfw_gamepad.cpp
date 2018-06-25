@@ -16,7 +16,7 @@ GlfwGamepad::GlfwGamepad(int index)
 }
 
 //  ----------------------------------------------------------------------------
-float GlfwGamepad::getAxisValue(const Axis axis) const {
+float GlfwGamepad::getAxisValue(const unsigned axis) const {
     const auto& find = mAxisMap.find(axis);
 
     if (find == mAxisMap.end()) {
@@ -95,9 +95,8 @@ void GlfwGamepad::update() {
     //  Update each axis
     int axisCount;
     const float* axes = glfwGetJoystickAxes(mIndex, &axisCount);
-    for (int a = 0; a < axisCount; ++a) {
-        const Axis axis = static_cast<Axis>(a);
-        mAxisMap[axis] = axes[a];
+    for (unsigned a = 0; a < axisCount; ++a) {
+        mAxisMap[a] = axes[a];
     }
 }
 }
