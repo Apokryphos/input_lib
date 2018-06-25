@@ -1,0 +1,103 @@
+#include "input_lib/glfw/glfw_gamepad.hpp"
+#include <GLFW/glfw3.h>
+#include <cmath>
+
+namespace InputLib
+{
+//  ----------------------------------------------------------------------------
+static float applyDeadzone(const float value, const float deadzone) {
+    return std::abs(value) >= deadzone ? value : 0.0f;
+}
+
+//  ----------------------------------------------------------------------------
+GlfwGamepad::GlfwGamepad(int index)
+: mIndex(index),
+  mDeadzone(0.2f) {
+}
+
+//  ----------------------------------------------------------------------------
+float GlfwGamepad::getAxisValue(const Axis axis) const {
+    const auto& find = mAxisMap.find(axis);
+
+    if (find == mAxisMap.end()) {
+        return 0.0f;
+    }
+
+    return applyDeadzone(find->second, mDeadzone);
+}
+
+//  ----------------------------------------------------------------------------
+ButtonState GlfwGamepad::getButtonState(const Button button) const {
+    return mButtonStateMap.getState(button, ButtonState::Up);
+}
+
+//  ----------------------------------------------------------------------------
+bool GlfwGamepad::isConnected() {
+    return glfwJoystickPresent(mIndex) == GLFW_TRUE;
+}
+
+//  ----------------------------------------------------------------------------
+bool GlfwGamepad::isDown(const Button button) {
+    const ButtonState buttonState = mButtonStateMap.getState(
+        button,
+        ButtonState::Up
+    );
+
+    return (
+        buttonState == ButtonState::Down ||
+        buttonState == ButtonState::Pressed
+    );
+}
+
+//  ----------------------------------------------------------------------------
+bool GlfwGamepad::isPressed(const Button button) {
+    return mButtonStateMap.getState(
+        button,
+        ButtonState::Up
+    ) == ButtonState::Pressed;
+}
+
+//  ----------------------------------------------------------------------------
+void GlfwGamepad::update() {
+    if (!glfwJoystickPresent(mIndex)) {
+        mButtonStateMap.clear();
+        return;
+    }
+
+    mButtonStateMap.update();
+
+    int buttonCount;
+    const unsigned char* buttons = glfwGetJoystickButtons(mIndex, &buttonCount);
+
+    if (buttons == NULL || buttonCount == 0) {
+        return;
+    }
+
+    for (int b = 0; b < buttonCount; ++b) {
+        const int glfwButtonState = buttons[b];
+
+        ButtonState buttonState;
+        switch (glfwButtonState) {
+            case GLFW_PRESS:
+                buttonState = ButtonState::Pressed;
+                break;
+
+            case GLFW_RELEASE:
+                buttonState = ButtonState::Released;
+                break;
+        }
+
+        const Button button = static_cast<Button>(b);
+
+        mButtonStateMap.setState(button, buttonState);
+    }
+
+    //  Update each axis
+    int axisCount;
+    const float* axes = glfwGetJoystickAxes(mIndex, &axisCount);
+    for (int a = 0; a < axisCount; ++a) {
+        const Axis axis = static_cast<Axis>(a);
+        mAxisMap[axis] = axes[a];
+    }
+}
+}

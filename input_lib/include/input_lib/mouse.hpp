@@ -1,6 +1,5 @@
 #pragma once
 
-#include "input_lib/action.hpp"
 #include "input_lib/device.hpp"
 
 namespace InputLib
@@ -28,10 +27,10 @@ struct Point
 class Mouse : public InputDevice
 {
 public:
-    void bind(const Action action, const MouseAxis axis);
-    void bind(const Action action, const MouseButton button);
-    double getAnalogValue(const Action action);
-    bool getDigitalValue(const Action action);
+    ButtonState getButtonState(int button) const;
+    ButtonState getLeftButtonState() const;
+    ButtonState getMiddleState() const;
+    ButtonState getRightButtonState() const;
     Point getPosition();
 };
 }

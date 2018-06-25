@@ -7,8 +7,6 @@
 
 namespace InputLib
 {
-
-
 class KeyStateMap
 {
     std::map<Key, KeyState> mMap;

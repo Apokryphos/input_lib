@@ -1,4 +1,5 @@
 #include <glad/glad.h>
+#include "input_lib/action_map.hpp"
 #include "input_lib/glfw/glfw_input_manager.hpp"
 #include <GLFW/glfw3.h>
 #include <stdlib.h>
@@ -7,35 +8,15 @@
 
 using namespace InputLib;
 
-enum class InputActionId
+enum InputActionId
 {
     Accept,
-    MoveUp,
+    Accelerate,
+    Crouch,
+    MenuUp,
+    MoveX,
     Quit,
 };
-
-class InputActions
-{
-static void makeDigital(Action& action, const InputActionId actionId) {
-    action.id = static_cast<int>(actionId);
-    action.type = ActionType::Digital;
-}
-
-public:
-    static Action Accept;
-    static Action Quit;
-    static Action MoveUp;
-
-    static void initialize() {
-        makeDigital(Accept, InputActionId::Accept);
-        makeDigital(MoveUp, InputActionId::MoveUp);
-        makeDigital(Quit, InputActionId::Quit);
-    }
-};
-
-Action InputActions::Accept = {};
-Action InputActions::Quit = {};
-Action InputActions::MoveUp = {};
 
 //  ----------------------------------------------------------------------------
 static void error_callback(int error, const char* description)
@@ -63,6 +44,7 @@ int main(void)
     }
 
     glfwSetKeyCallback(window, InputLib::keyboardCallback);
+    glfwSetJoystickCallback(InputLib::joystickCallback);
 
     glfwMakeContextCurrent(window);
 
@@ -76,27 +58,68 @@ int main(void)
     GlfwInputManager inputManager;
 
     auto& keyboard = inputManager.getKeyboard();
+    auto& gamepad = inputManager.getGamepad(0);
 
-    InputActions::initialize();
-    keyboard.bind(InputActions::Accept, Key::Enter);
-    keyboard.bind(InputActions::MoveUp, Key::Up);
-    keyboard.bind(InputActions::Quit, Key::Escape);
+    ActionMap actionMap;
+    actionMap.mapAction(InputActionId::Accept, Key::Enter);
+    actionMap.mapAction(InputActionId::Accelerate, Key::Space);
+    actionMap.mapAction(InputActionId::MenuUp, Key::Up);
+    actionMap.mapAction(InputActionId::Quit, Key::Escape);
+
+    actionMap.mapAction(
+        InputActionId::MoveX,
+        Key::Left,
+        Key::Right
+    );
+
+    actionMap.mapAction(InputActionId::Accept, Button::Button1);
+    actionMap.mapAction(InputActionId::Accelerate, Axis::Axis3);
+    actionMap.mapAction(InputActionId::Crouch, Button::Button2);
+    actionMap.mapAction(InputActionId::MoveX, Axis::Axis1);
+
 
     while (!glfwWindowShouldClose(window)) {
         inputManager.update();
 
-        auto& keyboard = inputManager.getKeyboard();
-
-        if (keyboard.getDigitalValue(InputActions::Quit)) {
+        if (actionMap.getDigitalValue(InputActionId::Quit, keyboard)) {
             glfwSetWindowShouldClose(window, GLFW_TRUE);
         }
 
-        if (keyboard.isPressed(InputActions::Accept)) {
+        if (actionMap.isPressed(InputActionId::Accept, keyboard)) {
             std::cout << "ACCEPT" << std::endl;
         }
 
-        if (keyboard.getDigitalValue(InputActions::MoveUp)) {
+        if (actionMap.getDigitalValue(InputActionId::MenuUp, keyboard)) {
             std::cout << "MOVE UP" << std::endl;
+        }
+
+        if (actionMap.getAxisValue(InputActionId::MoveX, keyboard) != 0.0f) {
+            std::cout <<
+                "MOVE X " <<
+                actionMap.getAxisValue(InputActionId::MoveX, keyboard) <<
+                std::endl;
+        }
+
+        if (actionMap.isPressed(InputActionId::Accept, gamepad)) {
+            std::cout << "ACCEPT" << std::endl;
+        }
+
+        if (actionMap.getDigitalValue(InputActionId::Crouch, gamepad)) {
+            std::cout << "CROUCH" << std::endl;
+        }
+
+        // if (actionMap.getAxisValue(InputActionId::Accelerate, gamepad) != 0.0f) {
+        //     std::cout <<
+        //         "ACCELERATE X " <<
+        //         actionMap.getAxisValue(InputActionId::Accelerate, gamepad) <<
+        //         std::endl;
+        // }
+
+        if (actionMap.getAxisValue(InputActionId::MoveX, gamepad) != 0.0f) {
+            std::cout <<
+                "MOVE X " <<
+                actionMap.getAxisValue(InputActionId::MoveX, gamepad) <<
+                std::endl;
         }
 
         float ratio;

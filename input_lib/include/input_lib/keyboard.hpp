@@ -1,7 +1,8 @@
 #pragma once
 
-#include "input_lib/action.hpp"
 #include "input_lib/device.hpp"
+#include "input_lib/key.hpp"
+#include "input_lib/key_state.hpp"
 
 namespace InputLib
 {
@@ -9,9 +10,8 @@ class Keyboard : public InputDevice
 {
 public:
     virtual ~Keyboard() {}
-    virtual void bind(const Action action, const Key key) = 0;
-    virtual double getAnalogValue(const Action action) = 0;
-    virtual bool getDigitalValue(const Action action) = 0;
-    virtual bool isPressed(const Action action) = 0;
+    virtual KeyState getKeyState(const Key key) const = 0;
+    virtual bool isDown(const Key key) = 0;
+    virtual bool isPressed(const Key key) = 0;
 };
 }

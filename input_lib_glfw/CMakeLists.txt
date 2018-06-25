@@ -5,12 +5,16 @@ find_package(glfw3 REQUIRED)
 project(input_lib_glfw)
 
 set(SOURCE_FILES
+    src/glfw_gamepad.cpp
     src/glfw_input_manager.cpp
     src/glfw_key_map.cpp
     src/glfw_keyboard.cpp
 )
 
 add_library(${PROJECT_NAME} ${SOURCE_FILES})
+
+set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 17)
+set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD_REQUIRED ON)
 
 target_include_directories(${PROJECT_NAME} PUBLIC include)
 

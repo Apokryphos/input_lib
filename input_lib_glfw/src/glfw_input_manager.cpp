@@ -4,12 +4,23 @@
 #include <GLFW/glfw3.h>
 #include <algorithm>
 #include <cassert>
+#include <iostream>
 #include <vector>
 
 namespace InputLib
 {
 static GlfwInputManager* sInputManager;
 static Bimap<Key, int> sKeyMap;
+
+//  ----------------------------------------------------------------------------
+void joystickCallback(int joy, int event) {
+    auto& gamepad = static_cast<GlfwGamepad&>(sInputManager->getGamepad(joy));
+    if (event == GLFW_CONNECTED) {
+        std::cout << "Joystick " << joy << " connected." << std::endl;
+    } else {
+        std::cout << "Joystick " << joy << " disconnected." << std::endl;
+    }
+}
 
 //  ----------------------------------------------------------------------------
 static void updateKeyState(int glfwKey, const KeyState keyState) {
@@ -58,6 +69,15 @@ GlfwInputManager::~GlfwInputManager() {
 }
 
 //  ----------------------------------------------------------------------------
+Gamepad& GlfwInputManager::getGamepad(const unsigned index) {
+    if (mGamepads.find(index) == mGamepads.end())  {
+        mGamepads.try_emplace(index, index);
+    }
+
+    return mGamepads.at(index);
+}
+
+//  ----------------------------------------------------------------------------
 Mouse& GlfwInputManager::getMouse() {
     // return mMouse;
 }
@@ -74,5 +94,13 @@ void GlfwInputManager::update() {
     keyStateMap.update();
 
     glfwPollEvents();
+
+    //  Update gamepads
+    for (int j = 0; j < GLFW_JOYSTICK_LAST; ++j) {
+        if (glfwJoystickPresent(j) == GLFW_TRUE) {
+            auto& gamepad = static_cast<GlfwGamepad&>(getGamepad(j));
+            gamepad.update();
+        }
+    }
 }
 }

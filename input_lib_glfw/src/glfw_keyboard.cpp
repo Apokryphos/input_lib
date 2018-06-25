@@ -3,27 +3,21 @@
 namespace InputLib
 {
 //  ----------------------------------------------------------------------------
-void GlfwKeyboard::bind(const Action action, const Key key) {
-    mActionMap.map(action, key);
+KeyState GlfwKeyboard::getKeyState(const Key key) const {
+    return mKeyState.getState(key, KeyState::Up);
 }
 
 //  ----------------------------------------------------------------------------
-double GlfwKeyboard::getAnalogValue(const Action action) {
-    const Key key = mActionMap.getValue(action);
+bool GlfwKeyboard::isDown(const Key key) {
     const KeyState keyState = mKeyState.getState(key, KeyState::Released);
-    return keyStateToAnalogValue(keyState);
+    return (
+        keyState == KeyState::Down ||
+        keyState == KeyState::Pressed
+    );
 }
 
 //  ----------------------------------------------------------------------------
-bool GlfwKeyboard::getDigitalValue(const Action action) {
-    const Key key = mActionMap.getValue(action);
-    const KeyState keyState = mKeyState.getState(key, KeyState::Released);
-    return keyStateToDigitalValue(keyState);
-}
-
-//  ----------------------------------------------------------------------------
-bool GlfwKeyboard::isPressed(const Action action) {
-    const Key key = mActionMap.getValue(action);
+bool GlfwKeyboard::isPressed(const Key key) {
     const KeyState keyState = mKeyState.getState(key, KeyState::Released);
     return keyState == KeyState::Pressed;
 }
