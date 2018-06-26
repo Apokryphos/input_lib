@@ -1,6 +1,5 @@
 #pragma once
 
-#include "input_lib/button.hpp"
 #include "input_lib/button_state.hpp"
 #include <iostream>
 #include <map>
@@ -9,18 +8,18 @@ namespace InputLib
 {
 class ButtonStateMap
 {
-    std::map<Button, ButtonState> mMap;
+    std::map<unsigned, ButtonState> mMap;
 
 public:
     void clear() {
         mMap.clear();
     }
 
-    ButtonState getState(const Button button) const {
+    ButtonState getState(const unsigned button) const {
         return mMap.at(button);
     }
 
-    ButtonState getState(const Button button, const ButtonState defaultButtonState) const {
+    ButtonState getState(const unsigned button, const ButtonState defaultButtonState) const {
         const auto& find = mMap.find(button);
         if (find == mMap.end()) {
             return defaultButtonState;
@@ -29,7 +28,7 @@ public:
         return find->second;
     }
 
-    void setState(const Button button, ButtonState buttonState) {
+    void setState(const unsigned button, ButtonState buttonState) {
         const ButtonState lastState = getState(button, ButtonState::Up);
 
         if (buttonState == ButtonState::Pressed) {

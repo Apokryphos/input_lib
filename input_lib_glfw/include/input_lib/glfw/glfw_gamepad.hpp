@@ -19,10 +19,10 @@ public:
     GlfwGamepad(int index);
     virtual ~GlfwGamepad() {}
     virtual float getAxisValue(const unsigned axis) const override;
-    virtual ButtonState getButtonState(const Button button) const override;
+    virtual ButtonState getButtonState(const unsigned button) const override;
     virtual bool isConnected() override;
-    virtual bool isDown(const Button button) override;
-    virtual bool isPressed(const Button button) override;
+    virtual bool isDown(const unsigned button) override;
+    virtual bool isPressed(const unsigned button) override;
     void update();
 };
 }

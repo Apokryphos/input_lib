@@ -61,21 +61,21 @@ int main(void)
     auto& gamepad = inputManager.getGamepad(0);
 
     ActionMap actionMap;
-    actionMap.mapAction(InputActionId::Accept, Key::Enter);
-    actionMap.mapAction(InputActionId::Accelerate, Key::Space);
-    actionMap.mapAction(InputActionId::MenuUp, Key::Up);
-    actionMap.mapAction(InputActionId::Quit, Key::Escape);
+    actionMap.mapKey(InputActionId::Accept, Key::Enter);
+    actionMap.mapKey(InputActionId::Accelerate, Key::Space);
+    actionMap.mapKey(InputActionId::MenuUp, Key::Up);
+    actionMap.mapKey(InputActionId::Quit, Key::Escape);
 
-    actionMap.mapAction(
+    actionMap.mapKeys(
         InputActionId::MoveX,
         Key::Left,
         Key::Right
     );
 
-    actionMap.mapAction(InputActionId::Accept, Button::Button1);
-    actionMap.mapAction(InputActionId::Accelerate, 2);
-    actionMap.mapAction(InputActionId::Crouch, Button::Button2);
-    actionMap.mapAction(InputActionId::MoveX, 0);
+    actionMap.mapButton(InputActionId::Accept, 0);
+    actionMap.mapAxis(InputActionId::Accelerate, 2);
+    actionMap.mapButton(InputActionId::Crouch, 1);
+    actionMap.mapAxis(InputActionId::MoveX, 0);
 
 
     while (!glfwWindowShouldClose(window)) {

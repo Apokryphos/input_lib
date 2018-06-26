@@ -27,7 +27,7 @@ float GlfwGamepad::getAxisValue(const unsigned axis) const {
 }
 
 //  ----------------------------------------------------------------------------
-ButtonState GlfwGamepad::getButtonState(const Button button) const {
+ButtonState GlfwGamepad::getButtonState(const unsigned button) const {
     return mButtonStateMap.getState(button, ButtonState::Up);
 }
 
@@ -37,7 +37,7 @@ bool GlfwGamepad::isConnected() {
 }
 
 //  ----------------------------------------------------------------------------
-bool GlfwGamepad::isDown(const Button button) {
+bool GlfwGamepad::isDown(const unsigned button) {
     const ButtonState buttonState = mButtonStateMap.getState(
         button,
         ButtonState::Up
@@ -50,7 +50,7 @@ bool GlfwGamepad::isDown(const Button button) {
 }
 
 //  ----------------------------------------------------------------------------
-bool GlfwGamepad::isPressed(const Button button) {
+bool GlfwGamepad::isPressed(const unsigned button) {
     return mButtonStateMap.getState(
         button,
         ButtonState::Up
@@ -73,7 +73,7 @@ void GlfwGamepad::update() {
         return;
     }
 
-    for (int b = 0; b < buttonCount; ++b) {
+    for (unsigned b = 0; b < buttonCount; ++b) {
         const int glfwButtonState = buttons[b];
 
         ButtonState buttonState;
@@ -87,9 +87,7 @@ void GlfwGamepad::update() {
                 break;
         }
 
-        const Button button = static_cast<Button>(b);
-
-        mButtonStateMap.setState(button, buttonState);
+        mButtonStateMap.setState(b, buttonState);
     }
 
     //  Update each axis

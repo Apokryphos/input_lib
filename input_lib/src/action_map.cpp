@@ -9,7 +9,7 @@ float ActionMap::getAnalogValue(
     const ActionId actionId,
     const Gamepad& gamepad
 ) const {
-    const Button button = mButtonsByActionId.at(actionId);
+    const unsigned button = mButtonsByActionId.at(actionId);
     const ButtonState buttonState = gamepad.getButtonState(button);
     return buttonStateToAnalogValue(buttonState);
 }
@@ -68,7 +68,7 @@ bool ActionMap::getDigitalValue(
     const ActionId actionId,
     const Gamepad& gamepad
 ) const {
-    const Button button = mButtonsByActionId.at(actionId);
+    const unsigned button = mButtonsByActionId.at(actionId);
     const ButtonState buttonState = gamepad.getButtonState(button);
     return buttonStateToDigitalValue(buttonState);
 }
@@ -98,28 +98,28 @@ bool ActionMap::isPressed(
     const ActionId actionId,
     const Gamepad& gamepad
 ) const {
-    const Button button = mButtonsByActionId.at(actionId);
+    const unsigned button = mButtonsByActionId.at(actionId);
     const ButtonState buttonState = gamepad.getButtonState(button);
     return buttonState == ButtonState::Pressed;
 }
 
 //  ----------------------------------------------------------------------------
-void ActionMap::mapAction(const ActionId actionId, const unsigned axis) {
+void ActionMap::mapAxis(const ActionId actionId, const unsigned axis) {
     mAxisByActionId.emplace(actionId, axis);
 }
 
 //  ----------------------------------------------------------------------------
-void ActionMap::mapAction(const ActionId actionId, const Button button) {
+void ActionMap::mapButton(const ActionId actionId, const unsigned button) {
     mButtonsByActionId.emplace(actionId, button);
 }
 
 //  ----------------------------------------------------------------------------
-void ActionMap::mapAction(const ActionId actionId, const Key key) {
+void ActionMap::mapKey(const ActionId actionId, const Key key) {
     mKeysByActionId.emplace(actionId, key);
 }
 
 //  ----------------------------------------------------------------------------
-void ActionMap::mapAction(
+void ActionMap::mapKeys(
     const ActionId actionId,
     const Key negativeKey,
     const Key positiveKey

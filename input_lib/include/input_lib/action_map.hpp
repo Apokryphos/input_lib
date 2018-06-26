@@ -1,6 +1,5 @@
 #pragma once
 
-#include "input_lib/button.hpp"
 #include "input_lib/gamepad.hpp"
 #include "input_lib/key.hpp"
 #include "input_lib/keyboard.hpp"
@@ -14,7 +13,7 @@ typedef unsigned int ActionId;
 class ActionMap
 {
     std::map<ActionId, unsigned> mAxisByActionId;
-    std::map<ActionId, Button> mButtonsByActionId;
+    std::map<ActionId, unsigned> mButtonsByActionId;
     std::map<ActionId, Key> mKeysByActionId;
     std::map<ActionId, Key> mNegativeKeysByActionId;
     std::map<ActionId, Key> mPositiveKeysByActionId;
@@ -28,10 +27,10 @@ public:
     bool getDigitalValue(const ActionId actionId, const Keyboard& keyboard) const;
     bool isPressed(const ActionId actionId, const Keyboard& keyboard) const;
     bool isPressed(const ActionId actionId, const Gamepad& gamepad) const;
-    void mapAction(const ActionId actionId, const unsigned axis);
-    void mapAction(const ActionId actionId, const Button button);
-    void mapAction(const ActionId actionId, const Key key);
-    void mapAction(
+    void mapAxis(const ActionId actionId, const unsigned axis);
+    void mapButton(const ActionId actionId, const unsigned button);
+    void mapKey(const ActionId actionId, const Key key);
+    void mapKeys(
         const ActionId actionId,
         const Key negativeKey,
         const Key positiveKey
