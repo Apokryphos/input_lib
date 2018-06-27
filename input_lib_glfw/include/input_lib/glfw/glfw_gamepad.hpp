@@ -3,7 +3,6 @@
 #include "input_lib/bimap.hpp"
 #include "input_lib/button_state_map.hpp"
 #include "input_lib/gamepad.hpp"
-#include "input_lib/gamepad_input.hpp"
 #include <map>
 
 namespace InputLib
