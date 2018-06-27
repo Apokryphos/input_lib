@@ -1,5 +1,6 @@
 #pragma once
 
+#include "input_lib/action_id.hpp"
 #include "input_lib/gamepad.hpp"
 #include "input_lib/key.hpp"
 #include "input_lib/keyboard.hpp"
