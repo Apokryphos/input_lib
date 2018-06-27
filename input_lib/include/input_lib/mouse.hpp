@@ -1,29 +1,10 @@
 #pragma once
 
 #include "input_lib/device.hpp"
+#include "input_lib/point.hpp"
 
 namespace InputLib
 {
-enum class MouseAxis
-{
-    X,
-    Y,
-    Wheel,
-};
-
-enum class MouseButton
-{
-    Left,
-    Right,
-    Middle,
-};
-
-struct Point
-{
-    int x;
-    int y;
-};
-
 class Mouse : public Device
 {
 public:
