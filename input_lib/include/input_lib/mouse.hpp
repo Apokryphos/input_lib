@@ -27,6 +27,11 @@ struct Point
 class Mouse : public Device
 {
 public:
+    Mouse()
+    : Device(DeviceType::Mouse) {
+    }
+
+    virtual ~Mouse() {}
     ButtonState getButtonState(int button) const;
     ButtonState getLeftButtonState() const;
     ButtonState getMiddleState() const;

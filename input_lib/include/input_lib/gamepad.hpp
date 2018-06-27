@@ -8,6 +8,10 @@ namespace InputLib
 class Gamepad : public Device
 {
 public:
+    Gamepad()
+    : Device(DeviceType::Gamepad) {
+    }
+
     virtual ~Gamepad() {}
     virtual float getAxisValue(const unsigned axis) const = 0;
     virtual ButtonState getButtonState(const unsigned button) const = 0;
