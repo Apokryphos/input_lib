@@ -2,8 +2,9 @@
 
 namespace InputLib
 {
-class InputDevice
+class Device
 {
 public:
+    virtual ~Device() {}
 };
 }

@@ -6,7 +6,7 @@
 
 namespace InputLib
 {
-class Keyboard : public InputDevice
+class Keyboard : public Device
 {
 public:
     virtual ~Keyboard() {}

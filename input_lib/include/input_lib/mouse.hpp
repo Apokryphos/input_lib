@@ -24,7 +24,7 @@ struct Point
     int y;
 };
 
-class Mouse : public InputDevice
+class Mouse : public Device
 {
 public:
     ButtonState getButtonState(int button) const;

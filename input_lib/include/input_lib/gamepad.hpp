@@ -5,7 +5,7 @@
 
 namespace InputLib
 {
-class Gamepad : public InputDevice
+class Gamepad : public Device
 {
 public:
     virtual ~Gamepad() {}
