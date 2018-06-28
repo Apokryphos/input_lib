@@ -1,6 +1,7 @@
 #pragma once
 
 #include "input_lib/key_state.hpp"
+#include "input_lib/point.hpp"
 #include <string>
 
 namespace InputLib
@@ -16,5 +17,13 @@ inline static std::string to_string(const KeyState keyState) {
         case KeyState::Pressed:
             return "Pressed";
     }
+}
+
+inline static std::string to_string(const Point& point) {
+    return "(" +
+        std::to_string(point.x) +
+        ", " +
+        std::to_string(point.y) +
+        ")";
 }
 }

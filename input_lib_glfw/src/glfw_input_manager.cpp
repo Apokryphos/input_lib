@@ -23,6 +23,13 @@ void joystickCallback(int joy, int event) {
 }
 
 //  ----------------------------------------------------------------------------
+static void updateButtonState(int glfwButton, const ButtonState buttonState) {
+    auto& mouse = sInputManager->getMouse();
+    auto& buttonStateMap = static_cast<GlfwMouse&>(mouse).getButtonStateMap();
+    buttonStateMap.setState(glfwButton, buttonState);
+}
+
+//  ----------------------------------------------------------------------------
 static void updateKeyState(int glfwKey, const KeyState keyState) {
     auto& keyboard = sInputManager->getKeyboard();
     auto& keyStateMap = static_cast<GlfwKeyboard&>(keyboard).getKeyStateMap();
@@ -57,6 +64,42 @@ void keyboardCallback(
 }
 
 //  ----------------------------------------------------------------------------
+void mouseButtonCallback(
+    GLFWwindow* window,
+    int button,
+    int action,
+    int mods
+) {
+    switch (action) {
+        case GLFW_PRESS:
+            updateButtonState(button, ButtonState::Pressed);
+            break;
+
+        case GLFW_REPEAT:
+            updateButtonState(button, ButtonState::Down);
+            break;
+
+        case GLFW_RELEASE:
+            updateButtonState(button, ButtonState::Released);
+            break;
+    }
+}
+
+//  ----------------------------------------------------------------------------
+void mousePositionCallback(
+    GLFWwindow* window,
+    double xpos,
+    double ypos
+) {
+    if (sInputManager == nullptr) {
+        return;
+    }
+
+    auto& mouse = static_cast<GlfwMouse&>(sInputManager->getMouse());
+    mouse.setPosition(xpos, ypos);
+}
+
+//  ----------------------------------------------------------------------------
 GlfwInputManager::GlfwInputManager() {
     assert(sInputManager == nullptr);
     sInputManager = this;
@@ -79,7 +122,7 @@ Gamepad& GlfwInputManager::getGamepad(const unsigned index) {
 
 //  ----------------------------------------------------------------------------
 Mouse& GlfwInputManager::getMouse() {
-    // return mMouse;
+    return mMouse;
 }
 
 //  ----------------------------------------------------------------------------
@@ -92,6 +135,10 @@ void GlfwInputManager::update() {
     //  Update Pressed and Released states to Down and Up
     auto& keyStateMap = mKeyboard.getKeyStateMap();
     keyStateMap.update();
+
+    //  Update Pressed and Released states to Down and Up
+    auto& buttonStateMap = mMouse.getButtonStateMap();
+    buttonStateMap.update();
 
     glfwPollEvents();
 

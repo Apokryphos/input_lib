@@ -2,6 +2,7 @@
 
 #include "input_lib/glfw/glfw_gamepad.hpp"
 #include "input_lib/glfw/glfw_keyboard.hpp"
+#include "input_lib/glfw/glfw_mouse.hpp"
 #include "input_lib/input_manager.hpp"
 
 struct GLFWwindow;
@@ -11,6 +12,7 @@ namespace InputLib
 class GlfwInputManager : public InputManager
 {
     GlfwKeyboard mKeyboard;
+    GlfwMouse mMouse;
     std::map<int, GlfwGamepad> mGamepads;
 
 public:
@@ -30,5 +32,18 @@ void keyboardCallback(
     int scancode,
     int action,
     int mods
+);
+
+void mouseButtonCallback(
+    GLFWwindow* window,
+    int button,
+    int action,
+    int mods
+);
+
+void mousePositionCallback(
+    GLFWwindow* window,
+    double xpos,
+    double ypos
 );
 }

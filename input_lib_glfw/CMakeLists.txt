@@ -9,6 +9,7 @@ set(SOURCE_FILES
     src/glfw_input_manager.cpp
     src/glfw_key_map.cpp
     src/glfw_keyboard.cpp
+    src/glfw_mouse.cpp
 )
 
 add_library(${PROJECT_NAME} ${SOURCE_FILES})

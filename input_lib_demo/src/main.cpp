@@ -1,5 +1,6 @@
 #include <glad/glad.h>
 #include "input_lib/action_map.hpp"
+#include "input_lib/to_string.hpp"
 #include "input_lib/glfw/glfw_input_manager.hpp"
 #include <GLFW/glfw3.h>
 #include <stdlib.h>
@@ -45,6 +46,8 @@ int main(void)
 
     glfwSetKeyCallback(window, InputLib::keyboardCallback);
     glfwSetJoystickCallback(InputLib::joystickCallback);
+    glfwSetCursorPosCallback(window, mousePositionCallback);
+    glfwSetMouseButtonCallback(window, mouseButtonCallback);
 
     glfwMakeContextCurrent(window);
 
@@ -58,6 +61,7 @@ int main(void)
     GlfwInputManager inputManager;
 
     auto& keyboard = inputManager.getKeyboard();
+    auto& mouse = inputManager.getMouse();
     auto& gamepad = inputManager.getGamepad(0);
 
     ActionMap actionMap;
@@ -77,9 +81,20 @@ int main(void)
     actionMap.mapButton(InputActionId::Crouch, 1);
     actionMap.mapAxis(InputActionId::MoveX, 0);
 
+    Point lastMousePosition;
 
     while (!glfwWindowShouldClose(window)) {
         inputManager.update();
+
+        const Point mousePosition = mouse.getPosition();
+        if (mousePosition != lastMousePosition) {
+            std::cout << "MOUSE " << to_string(mousePosition) << std::endl;
+            lastMousePosition = mousePosition;
+        }
+
+        if (mouse.isPressed(0)) {
+            std::cout << "MOUSE LEFT BUTTON" << std::endl;
+        }
 
         if (actionMap.getDigitalValue(InputActionId::Quit, keyboard)) {
             glfwSetWindowShouldClose(window, GLFW_TRUE);

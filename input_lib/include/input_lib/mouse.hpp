@@ -1,5 +1,6 @@
 #pragma once
 
+#include "input_lib/button_state.hpp"
 #include "input_lib/device.hpp"
 #include "input_lib/point.hpp"
 
