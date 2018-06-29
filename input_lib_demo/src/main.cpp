@@ -1,5 +1,6 @@
 #include <glad/glad.h>
 #include "input_lib/action_map.hpp"
+#include "input_lib/gamepad_360.hpp"
 #include "input_lib/to_string.hpp"
 #include "input_lib/glfw/glfw_input_manager.hpp"
 #include <GLFW/glfw3.h>
@@ -76,9 +77,10 @@ int main(void)
         Key::Right
     );
 
-    actionMap.mapButton(InputActionId::Accept, 0);
+    //  Gamepad mapping
+    actionMap.mapButton(InputActionId::Accept, Gamepad360::A_BUTTON);
     actionMap.mapAxis(InputActionId::Accelerate, 2);
-    actionMap.mapButton(InputActionId::Crouch, 1);
+    actionMap.mapButton(InputActionId::Crouch, Gamepad360::B_BUTTON);
     actionMap.mapAxis(InputActionId::MoveX, 0);
 
     Point lastMousePosition;
