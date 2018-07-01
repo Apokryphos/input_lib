@@ -1,11 +1,48 @@
 #pragma once
 
+#include "input_lib/gamepad_button.hpp"
 #include "input_lib/key_state.hpp"
 #include "input_lib/point.hpp"
+#include <stdexcept>
 #include <string>
 
 namespace InputLib
 {
+inline static std::string to_string(const GamepadButton button) {
+    switch (button) {
+        case GamepadButton::Axis1:
+            return "Axis 1";
+        case GamepadButton::Axis2:
+            return "Axis 2";
+        case GamepadButton::Axis3:
+            return "Axis 3";
+        case GamepadButton::Axis4:
+            return "Axis 4";
+        case GamepadButton::Axis5:
+            return "Axis 5";
+        case GamepadButton::Axis6:
+            return "Axis 6";
+        case GamepadButton::Button1:
+            return "Button 1";
+        case GamepadButton::Button2:
+            return "Button 2";
+        case GamepadButton::Button3:
+            return "Button 3";
+        case GamepadButton::Button4:
+            return "Button 4";
+        case GamepadButton::Button5:
+            return "Button 5";
+        case GamepadButton::Button6:
+            return "Button 6";
+        case GamepadButton::Button7:
+            return "Button 7";
+        case GamepadButton::Button8:
+            return "Button 8";
+        default:
+            throw std::runtime_error("Case not implemented.");
+    }
+}
+
 inline static std::string to_string(const KeyState keyState) {
     switch (keyState) {
         case KeyState::Down:
