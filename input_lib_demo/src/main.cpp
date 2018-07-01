@@ -81,7 +81,7 @@ int main(void)
     actionMap.mapButton(InputActionId::Accept, Gamepad360::A_BUTTON);
     actionMap.mapAxis(InputActionId::Accelerate, 2);
     actionMap.mapButton(InputActionId::Crouch, Gamepad360::B_BUTTON);
-    actionMap.mapAxis(InputActionId::MoveX, 0);
+    actionMap.mapAxis(InputActionId::MoveX, Gamepad360::LEFT_STICK_X);
 
     Point lastMousePosition;
 

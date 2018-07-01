@@ -5,6 +5,15 @@ namespace InputLib
 class Gamepad360
 {
 public:
+    //  Axes
+    static const unsigned LEFT_STICK_X = 0;
+    static const unsigned LEFT_STICK_Y = 1;
+    static const unsigned LEFT_TRIGGER = 2;
+    static const unsigned RIGHT_STICK_X = 3;
+    static const unsigned RIGHT_STICK_Y = 4;
+    static const unsigned RIGHT_TRIGGER = 5;
+
+    //  Buttons
     static const unsigned A_BUTTON = 0;
     static const unsigned B_BUTTON = 1;
     static const unsigned X_BUTTON = 2;
