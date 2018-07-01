@@ -46,6 +46,20 @@ inline static std::string to_string(const GamepadButton button) {
             return "Button 7";
         case GamepadButton::Button8:
             return "Button 8";
+        case GamepadButton::Button9:
+            return "Button 9";
+        case GamepadButton::Button10:
+            return "Button 10";
+        case GamepadButton::Button11:
+            return "Button 11";
+        case GamepadButton::Button12:
+            return "Button 12";
+        case GamepadButton::Button13:
+            return "Button 13";
+        case GamepadButton::Button14:
+            return "Button 14";
+        case GamepadButton::Button15:
+            return "Button 15";
         default:
             throw std::runtime_error("Case not implemented.");
     }

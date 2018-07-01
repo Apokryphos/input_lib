@@ -65,23 +65,36 @@ int main(void)
     auto& mouse = inputManager.getMouse();
     auto& gamepad = inputManager.getGamepad(0);
 
-    ActionMap actionMap;
-    actionMap.mapKey(InputActionId::Accept, Key::Enter);
-    actionMap.mapKey(InputActionId::Accelerate, Key::Space);
-    actionMap.mapKey(InputActionId::MenuUp, Key::Up);
-    actionMap.mapKey(InputActionId::Quit, Key::Escape);
+    std::vector<Device*> devices = {
+        &keyboard,
+        &mouse,
+        &gamepad,
+    };
 
-    actionMap.mapKeys(
-        InputActionId::MoveX,
-        Key::Left,
-        Key::Right
-    );
+    ActionMap actionMap;
+
+    //  Keyboard mapping
+    actionMap.map(InputActionId::Accept, Key::Enter);
+    actionMap.map(InputActionId::Accelerate, Key::Space);
+    actionMap.map(InputActionId::MenuUp, Key::Up);
+    actionMap.map(InputActionId::Quit, Key::Escape);
+
+    // actionMap.mapKeys(
+    //     InputActionId::MoveX,
+    //     Key::Left,
+    //     Key::Right
+    // );
+
+    //  Mouse mapping
+    actionMap.map(InputActionId::Accept, MouseButton::LeftButton);
+    actionMap.map(InputActionId::Crouch, MouseButton::RightButton);
 
     //  Gamepad mapping
-    actionMap.mapButton(InputActionId::Accept, Gamepad360::A_BUTTON);
-    actionMap.mapAxis(InputActionId::Accelerate, 2);
-    actionMap.mapButton(InputActionId::Crouch, Gamepad360::B_BUTTON);
-    actionMap.mapAxis(InputActionId::MoveX, Gamepad360::LEFT_STICK_X);
+    actionMap.map(InputActionId::Accept, Gamepad360::A_BUTTON);
+    actionMap.map(InputActionId::Accelerate, Gamepad360::RIGHT_TRIGGER);
+    actionMap.map(InputActionId::Crouch, Gamepad360::B_BUTTON);
+    actionMap.map(InputActionId::MoveX, Gamepad360::LEFT_STICK_X);
+    actionMap.map(InputActionId::Quit, Gamepad360::BACK_BUTTON);
 
     Point lastMousePosition;
 
@@ -98,48 +111,40 @@ int main(void)
             std::cout << "MOUSE LEFT BUTTON" << std::endl;
         }
 
-        if (actionMap.getDigitalValue(InputActionId::Quit, keyboard)) {
-            glfwSetWindowShouldClose(window, GLFW_TRUE);
+        for (const auto& d : devices) {
+            const Device& device = *d;
+
+            if (actionMap.getDigitalValue(InputActionId::Quit, device)) {
+                glfwSetWindowShouldClose(window, GLFW_TRUE);
+            }
+
+            if (actionMap.isPressed(InputActionId::Accept, device)) {
+                std::cout << "ACCEPT" << std::endl;
+            }
+
+            if (actionMap.getDigitalValue(InputActionId::Crouch, device)) {
+                std::cout << "CROUCH" << std::endl;
+            }
+
+            if (actionMap.isPressed(InputActionId::MenuUp, device)) {
+                std::cout << "MENU UP" << std::endl;
+            }
+
+            // if (actionMap.getDigitalValue(InputActionId::Accelerate, device)) {
+            //     std::cout <<
+            //         "ACCELERATE X " <<
+            //         actionMap.getAnalogValue(InputActionId::Accelerate, device) <<
+            //         std::endl;
+            // }
+
+            if (actionMap.getDigitalValue(InputActionId::MoveX, device)) {
+                std::cout <<
+                    "MOVE X " <<
+                    actionMap.getAnalogValue(InputActionId::MoveX, device) <<
+                    std::endl;
+            }
         }
 
-        if (actionMap.isPressed(InputActionId::Accept, keyboard)) {
-            std::cout << "ACCEPT" << std::endl;
-        }
-
-        if (actionMap.getDigitalValue(InputActionId::MenuUp, keyboard)) {
-            std::cout << "MOVE UP" << std::endl;
-        }
-
-        if (actionMap.getAxisValue(InputActionId::MoveX, keyboard) != 0.0f) {
-            std::cout <<
-                "MOVE X " <<
-                actionMap.getAxisValue(InputActionId::MoveX, keyboard) <<
-                std::endl;
-        }
-
-        if (actionMap.isPressed(InputActionId::Accept, gamepad)) {
-            std::cout << "ACCEPT" << std::endl;
-        }
-
-        if (actionMap.getDigitalValue(InputActionId::Crouch, gamepad)) {
-            std::cout << "CROUCH" << std::endl;
-        }
-
-        // if (actionMap.getAxisValue(InputActionId::Accelerate, gamepad) != 0.0f) {
-        //     std::cout <<
-        //         "ACCELERATE X " <<
-        //         actionMap.getAxisValue(InputActionId::Accelerate, gamepad) <<
-        //         std::endl;
-        // }
-
-        if (actionMap.getAxisValue(InputActionId::MoveX, gamepad) != 0.0f) {
-            std::cout <<
-                "MOVE X " <<
-                actionMap.getAxisValue(InputActionId::MoveX, gamepad) <<
-                std::endl;
-        }
-
-        float ratio;
         int width, height;
         glfwGetFramebufferSize(window, &width, &height);
         glViewport(0, 0, width, height);

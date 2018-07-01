@@ -19,8 +19,8 @@ public:
     virtual ButtonState getMiddleState() const = 0;
     virtual Point getPosition() = 0;
     virtual ButtonState getRightButtonState() const = 0;
-    virtual bool isDown(const unsigned button) = 0;
-    virtual bool isPressed(const unsigned button) = 0;
+    virtual bool isDown(const unsigned button) const = 0;
+    virtual bool isPressed(const unsigned button) const = 0;
 
     static const unsigned LEFT_BUTTON = 0;
     static const unsigned MIDDLE_BUTTON = 2;

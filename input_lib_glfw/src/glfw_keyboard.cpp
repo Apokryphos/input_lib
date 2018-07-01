@@ -8,7 +8,7 @@ KeyState GlfwKeyboard::getKeyState(const Key key) const {
 }
 
 //  ----------------------------------------------------------------------------
-bool GlfwKeyboard::isDown(const Key key) {
+bool GlfwKeyboard::isDown(const Key key) const {
     const KeyState keyState = mKeyState.getState(key, KeyState::Released);
     return (
         keyState == KeyState::Down ||
@@ -17,7 +17,7 @@ bool GlfwKeyboard::isDown(const Key key) {
 }
 
 //  ----------------------------------------------------------------------------
-bool GlfwKeyboard::isPressed(const Key key) {
+bool GlfwKeyboard::isPressed(const Key key) const {
     const KeyState keyState = mKeyState.getState(key, KeyState::Released);
     return keyState == KeyState::Pressed;
 }

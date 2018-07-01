@@ -33,7 +33,7 @@ ButtonState GlfwMouse::getRightButtonState() const {
 }
 
 //  ----------------------------------------------------------------------------
-bool GlfwMouse::isDown(const unsigned button) {
+bool GlfwMouse::isDown(const unsigned button) const {
     const ButtonState buttonState = getButtonState(button);
     return (
         buttonState == ButtonState::Down ||
@@ -42,7 +42,7 @@ bool GlfwMouse::isDown(const unsigned button) {
 }
 
 //  ----------------------------------------------------------------------------
-bool GlfwMouse::isPressed(const unsigned button) {
+bool GlfwMouse::isPressed(const unsigned button) const {
     return getButtonState(button) == ButtonState::Pressed;
 }
 

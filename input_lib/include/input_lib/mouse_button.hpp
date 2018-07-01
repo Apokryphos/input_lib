@@ -2,11 +2,11 @@
 
 namespace InputLib
 {
-enum class GamepadButton
+enum class MouseButton
 {
-    Button1,
-    Button2,
-    Button3,
+    LeftButton,
+    RightButton,
+    MiddleButton,
     Button4,
     Button5,
     Button6,

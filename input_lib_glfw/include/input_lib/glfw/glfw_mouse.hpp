@@ -17,8 +17,8 @@ public:
     virtual ButtonState getMiddleState() const override;
     virtual Point getPosition() override;
     virtual ButtonState getRightButtonState() const override;
-    virtual bool isDown(const unsigned button) override;
-    virtual bool isPressed(const unsigned button) override;
+    virtual bool isDown(const unsigned button) const override;
+    virtual bool isPressed(const unsigned button) const override;
     void setPosition(float x, float y);
     void update();
 };

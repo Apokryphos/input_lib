@@ -1,40 +1,35 @@
 #pragma once
 
 #include "input_lib/action_id.hpp"
-#include "input_lib/gamepad.hpp"
-#include "input_lib/key.hpp"
-#include "input_lib/keyboard.hpp"
-#include <map>
-#include <string>
+#include "input_lib/device.hpp"
+#include "input_lib/gamepad_action_map.hpp"
+#include "input_lib/keyboard_action_map.hpp"
+#include "input_lib/mouse_action_map.hpp"
 
 namespace InputLib
 {
-typedef unsigned int ActionId;
-
 class ActionMap
 {
-    std::map<ActionId, unsigned> mAxisByActionId;
-    std::map<ActionId, unsigned> mButtonsByActionId;
-    std::map<ActionId, Key> mKeysByActionId;
-    std::map<ActionId, Key> mNegativeKeysByActionId;
-    std::map<ActionId, Key> mPositiveKeysByActionId;
+    KeyboardActionMap mKeyboardActionMap;
+    MouseActionMap mMouseActionMap;
+    GamepadActionMap mGamepadActionMap;
 
 public:
-    float getAnalogValue(const ActionId actionId, const Gamepad& gamepad) const;
-    float getAnalogValue(const ActionId actionId, const Keyboard& keyboard) const;
-    float getAxisValue(const ActionId actionId, const Gamepad& gamepad);
-    float getAxisValue(const ActionId actionId, const Keyboard& keyboard);
-    bool getDigitalValue(const ActionId actionId, const Gamepad& gamepad) const;
-    bool getDigitalValue(const ActionId actionId, const Keyboard& keyboard) const;
-    bool isPressed(const ActionId actionId, const Keyboard& keyboard) const;
-    bool isPressed(const ActionId actionId, const Gamepad& gamepad) const;
-    void mapAxis(const ActionId actionId, const unsigned axis);
-    void mapButton(const ActionId actionId, const unsigned button);
-    void mapKey(const ActionId actionId, const Key key);
-    void mapKeys(
+    float getAnalogValue(
         const ActionId actionId,
-        const Key negativeKey,
-        const Key positiveKey
-    );
+        const Device& device
+    ) const;
+    bool getDigitalValue(
+        const ActionId actionId,
+        const Device& device
+    ) const;
+    bool isPressed(
+        const ActionId actionId,
+        const Device& device
+    ) const;
+    void map(const ActionId actionId, const GamepadAxis axis);
+    void map(const ActionId actionId, const GamepadButton button);
+    void map(const ActionId actionId, const Key key);
+    void map(const ActionId actionId, const MouseButton button);
 };
 }

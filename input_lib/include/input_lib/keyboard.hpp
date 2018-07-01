@@ -15,7 +15,7 @@ public:
 
     virtual ~Keyboard() {}
     virtual KeyState getKeyState(const Key key) const = 0;
-    virtual bool isDown(const Key key) = 0;
-    virtual bool isPressed(const Key key) = 0;
+    virtual bool isDown(const Key key) const = 0;
+    virtual bool isPressed(const Key key) const = 0;
 };
 }
