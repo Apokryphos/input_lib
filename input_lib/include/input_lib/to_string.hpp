@@ -1,5 +1,6 @@
 #pragma once
 
+#include "input_lib/gamepad_axis.hpp"
 #include "input_lib/gamepad_button.hpp"
 #include "input_lib/key_state.hpp"
 #include "input_lib/point.hpp"
@@ -8,20 +9,27 @@
 
 namespace InputLib
 {
+inline static std::string to_string(const GamepadAxis axis) {
+    switch (axis) {
+        case GamepadAxis::Axis1:
+            return "Axis 1";
+        case GamepadAxis::Axis2:
+            return "Axis 2";
+        case GamepadAxis::Axis3:
+            return "Axis 3";
+        case GamepadAxis::Axis4:
+            return "Axis 4";
+        case GamepadAxis::Axis5:
+            return "Axis 5";
+        case GamepadAxis::Axis6:
+            return "Axis 6";
+        default:
+            throw std::runtime_error("Case not implemented.");
+    }
+}
+
 inline static std::string to_string(const GamepadButton button) {
     switch (button) {
-        case GamepadButton::Axis1:
-            return "Axis 1";
-        case GamepadButton::Axis2:
-            return "Axis 2";
-        case GamepadButton::Axis3:
-            return "Axis 3";
-        case GamepadButton::Axis4:
-            return "Axis 4";
-        case GamepadButton::Axis5:
-            return "Axis 5";
-        case GamepadButton::Axis6:
-            return "Axis 6";
         case GamepadButton::Button1:
             return "Button 1";
         case GamepadButton::Button2:

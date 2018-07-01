@@ -4,15 +4,6 @@ namespace InputLib
 {
 enum class GamepadButton
 {
-    //  Axes
-    Axis1,
-    Axis2,
-    Axis3,
-    Axis4,
-    Axis5,
-    Axis6,
-
-    //  Buttons
     Button1,
     Button2,
     Button3,
