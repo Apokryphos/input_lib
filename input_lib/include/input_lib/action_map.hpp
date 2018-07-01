@@ -27,7 +27,11 @@ public:
         const ActionId actionId,
         const Device& device
     ) const;
-    void map(const ActionId actionId, const GamepadAxis axis);
+    void map(
+        const ActionId actionId,
+        const GamepadAxis axis,
+        const AxisRange axisRange = AxisRange::Full
+    );
     void map(const ActionId actionId, const GamepadButton button);
     void map(const ActionId actionId, const Key key);
     void map(const ActionId actionId, const MouseButton button);

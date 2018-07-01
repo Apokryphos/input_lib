@@ -3,6 +3,20 @@
 namespace InputLib
 {
 //  ----------------------------------------------------------------------------
+static float getAxisValue(const float value, const AxisRange axisRange) {
+    switch (axisRange) {
+        case AxisRange::Full:
+            return value;
+        case AxisRange::Positive:
+            return value > 0.0f ? value : 0.0f;
+        case AxisRange::Negative:
+            return value < 0.0f ? value : 0.0f;
+        default:
+            throw std::runtime_error("Case not implemented.");
+    }
+}
+
+//  ----------------------------------------------------------------------------
 float GamepadActionMap::getAnalogValue(
     const ActionId actionId,
     const Gamepad& gamepad
@@ -18,7 +32,11 @@ float GamepadActionMap::getAnalogValue(
     for (const auto& entry : entries) {
         switch (entry.inputType) {
             case InputType::Axis: {
-                const float value = gamepad.getAxisValue(entry.value);
+                const float value = getAxisValue(
+                    gamepad.getAxisValue(entry.value),
+                    entry.axisRange
+                );
+
                 if (value != 0.0f) {
                     return value;
                 }
@@ -54,7 +72,11 @@ bool GamepadActionMap::getDigitalValue(
     for (const auto& entry : entries) {
         switch (entry.inputType) {
             case InputType::Axis: {
-                const float value = gamepad.getAxisValue(entry.value);
+                const float value = getAxisValue(
+                    gamepad.getAxisValue(entry.value),
+                    entry.axisRange
+                );
+
                 if (value != 0.0f) {
                     return true;
                 }
@@ -107,10 +129,12 @@ bool GamepadActionMap::isPressed(
 //  ----------------------------------------------------------------------------
 void GamepadActionMap::map(
     const ActionId actionId,
-    const GamepadAxis axis
+    const GamepadAxis axis,
+    const AxisRange axisRange
 ) {
     Entry entry = {};
     entry.inputType = InputType::Axis;
+    entry.axisRange = axisRange;
     entry.value = static_cast<unsigned>(axis);
 
     mEntriesByActionId[actionId].push_back(entry);

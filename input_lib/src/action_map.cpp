@@ -83,9 +83,10 @@ bool ActionMap::isPressed(
 //  ----------------------------------------------------------------------------
 void ActionMap::map(
     const ActionId actionId,
-    const GamepadAxis axis
+    const GamepadAxis axis,
+    const AxisRange axisRange
 ) {
-    mGamepadActionMap.map(actionId, axis);
+    mGamepadActionMap.map(actionId, axis, axisRange);
 }
 
 //  ----------------------------------------------------------------------------

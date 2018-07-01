@@ -1,6 +1,7 @@
 #pragma once
 
 #include "input_lib/action_id.hpp"
+#include "input_lib/axis_range.hpp"
 #include "input_lib/gamepad.hpp"
 #include "input_lib/gamepad_axis.hpp"
 #include "input_lib/gamepad_button.hpp"
@@ -15,6 +16,7 @@ class GamepadActionMap
     struct Entry
     {
         InputType inputType;
+        AxisRange axisRange;
         unsigned value;
     };
 
@@ -30,7 +32,11 @@ public:
         const Gamepad& gamepad
     ) const;
     bool isPressed(const ActionId actionId, const Gamepad& gamepad) const;
-    void map(const ActionId actionId, const GamepadAxis axis);
+    void map(
+        const ActionId actionId,
+        const GamepadAxis axis,
+        const AxisRange axisRange = AxisRange::Full
+    );
     void map(const ActionId actionId, const GamepadButton button);
 };
 }

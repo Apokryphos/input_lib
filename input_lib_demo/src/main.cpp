@@ -16,7 +16,8 @@ enum InputActionId
     Accelerate,
     Crouch,
     MenuUp,
-    MoveX,
+    MoveLeft,
+    MoveRight,
     Quit,
 };
 
@@ -77,6 +78,8 @@ int main(void)
     actionMap.map(InputActionId::Accept, Key::Enter);
     actionMap.map(InputActionId::Accelerate, Key::Space);
     actionMap.map(InputActionId::MenuUp, Key::Up);
+    actionMap.map(InputActionId::MoveLeft, Key::A);
+    actionMap.map(InputActionId::MoveRight, Key::E);
     actionMap.map(InputActionId::Quit, Key::Escape);
 
     // actionMap.mapKeys(
@@ -93,7 +96,16 @@ int main(void)
     actionMap.map(InputActionId::Accept, Gamepad360::A_BUTTON);
     actionMap.map(InputActionId::Accelerate, Gamepad360::RIGHT_TRIGGER);
     actionMap.map(InputActionId::Crouch, Gamepad360::B_BUTTON);
-    actionMap.map(InputActionId::MoveX, Gamepad360::LEFT_STICK_X);
+    actionMap.map(
+        InputActionId::MoveLeft,
+        Gamepad360::LEFT_STICK_X,
+        AxisRange::Negative
+    );
+    actionMap.map(
+        InputActionId::MoveRight,
+        Gamepad360::LEFT_STICK_X,
+        AxisRange::Positive
+    );
     actionMap.map(InputActionId::Quit, Gamepad360::BACK_BUTTON);
 
     Point lastMousePosition;
@@ -137,10 +149,17 @@ int main(void)
             //         std::endl;
             // }
 
-            if (actionMap.getDigitalValue(InputActionId::MoveX, device)) {
+            if (actionMap.getDigitalValue(InputActionId::MoveLeft, device)) {
                 std::cout <<
-                    "MOVE X " <<
-                    actionMap.getAnalogValue(InputActionId::MoveX, device) <<
+                    "MOVE LEFT " <<
+                    actionMap.getAnalogValue(InputActionId::MoveLeft, device) <<
+                    std::endl;
+            }
+
+            if (actionMap.getDigitalValue(InputActionId::MoveRight, device)) {
+                std::cout <<
+                    "MOVE RIGHT " <<
+                    actionMap.getAnalogValue(InputActionId::MoveRight, device) <<
                     std::endl;
             }
         }
