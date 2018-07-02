@@ -16,9 +16,10 @@ public:
     virtual ~Mouse() {}
     virtual ButtonState getButtonState(const unsigned button) const = 0;
     virtual ButtonState getLeftButtonState() const = 0;
-    virtual ButtonState getMiddleState() const = 0;
+    virtual ButtonState getMiddleButtonState() const = 0;
     virtual Point getPosition() = 0;
     virtual ButtonState getRightButtonState() const = 0;
+    virtual float getScroll() const = 0;
     virtual bool isDown(const unsigned button) const = 0;
     virtual bool isPressed(const unsigned button) const = 0;
 

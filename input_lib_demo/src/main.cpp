@@ -119,6 +119,7 @@ int main(void)
     glfwSetJoystickCallback(joystickCallback);
     glfwSetCursorPosCallback(window, mousePositionCallback);
     glfwSetMouseButtonCallback(window, mouseButtonCallback);
+    glfwSetScrollCallback(window, scrollCallback);
 
     glfwMakeContextCurrent(window);
 
@@ -184,10 +185,21 @@ int main(void)
         const Point mousePosition = mouse.getPosition();
         if (mousePosition != lastMousePosition) {
             std::cout
-                << mouse.getName() << ": "
+                << mouse.getName() << ": Position "
                 << to_string(mousePosition)
                 << std::endl;
             lastMousePosition = mousePosition;
+        }
+
+        //  Display mouse scroll when it changes
+        static Point lastMouseScroll;
+        const Point mouseScroll = mouse.getScroll();
+        if (mouseScroll != Point(0, 0)) {
+            std::cout
+                << mouse.getName() << ": Scroll "
+                << to_string(mouseScroll)
+                << std::endl;
+            lastMouseScroll = mouseScroll;
         }
 
         //  Display mouse left clicks

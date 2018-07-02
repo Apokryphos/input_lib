@@ -18,7 +18,7 @@ ButtonState GlfwMouse::getLeftButtonState() const {
 }
 
 //  ----------------------------------------------------------------------------
-ButtonState GlfwMouse::getMiddleState() const {
+ButtonState GlfwMouse::getMiddleButtonState() const {
     return getButtonState(Mouse::MIDDLE_BUTTON);
 }
 
@@ -36,6 +36,11 @@ Point GlfwMouse::getPosition() {
 //  ----------------------------------------------------------------------------
 ButtonState GlfwMouse::getRightButtonState() const {
     return getButtonState(Mouse::RIGHT_BUTTON);
+}
+
+//  ----------------------------------------------------------------------------
+float GlfwMouse::getScroll() const {
+    return mScroll;
 }
 
 //  ----------------------------------------------------------------------------
@@ -59,7 +64,14 @@ void GlfwMouse::setPosition(float x, float y) {
 }
 
 //  ----------------------------------------------------------------------------
+void GlfwMouse::setScroll(float scroll) {
+    mScroll = scroll;
+}
+
+//  ----------------------------------------------------------------------------
 void GlfwMouse::update() {
-    mButtonStateMap.clear();
+    mButtonStateMap.update();
+
+    mScroll = 0;
 }
 }

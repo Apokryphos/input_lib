@@ -100,6 +100,16 @@ void mousePositionCallback(
 }
 
 //  ----------------------------------------------------------------------------
+void scrollCallback(GLFWwindow* window, double xoffset, double yoffset) {
+    if (sInputManager == nullptr) {
+        return;
+    }
+
+    auto& mouse = static_cast<GlfwMouse&>(sInputManager->getMouse());
+    mouse.setScroll(yoffset);
+}
+
+//  ----------------------------------------------------------------------------
 GlfwInputManager::GlfwInputManager() {
     assert(sInputManager == nullptr);
     sInputManager = this;
@@ -136,9 +146,7 @@ void GlfwInputManager::update() {
     auto& keyStateMap = mKeyboard.getKeyStateMap();
     keyStateMap.update();
 
-    //  Update Pressed and Released states to Down and Up
-    auto& buttonStateMap = mMouse.getButtonStateMap();
-    buttonStateMap.update();
+    mMouse.update();
 
     glfwPollEvents();
 
