@@ -41,6 +41,7 @@ float GamepadActionMap::getAnalogValue(
                     return value;
                 }
             }
+            break;
 
             case InputType::Button: {
                 const ButtonState buttonState =
@@ -50,6 +51,7 @@ float GamepadActionMap::getAnalogValue(
                     return value;
                 }
             }
+            break;
         }
     }
 
@@ -81,6 +83,7 @@ bool GamepadActionMap::getDigitalValue(
                     return true;
                 }
             }
+            break;
 
             case InputType::Button: {
                 const ButtonState buttonState =
@@ -90,6 +93,7 @@ bool GamepadActionMap::getDigitalValue(
                     return true;
                 }
             }
+            break;
         }
     }
 
@@ -114,12 +118,14 @@ bool GamepadActionMap::isPressed(
             case InputType::Axis: {
                 throw std::runtime_error("Not implemented.");
             }
+            break;
 
             case InputType::Button: {
                 const ButtonState buttonState =
                     gamepad.getButtonState(entry.value);
                 return buttonState == ButtonState::Pressed;
             }
+            break;
         }
     }
 

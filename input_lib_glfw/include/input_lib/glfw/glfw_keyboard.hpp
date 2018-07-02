@@ -17,6 +17,7 @@ class GlfwKeyboard : public Keyboard
 public:
     virtual KeyState getKeyState(const Key key) const override;
     KeyStateMap& getKeyStateMap();
+    virtual const std::string& getName() const override;
     virtual bool isDown(const Key key) const override;
     virtual bool isPressed(const Key key) const override;
 };

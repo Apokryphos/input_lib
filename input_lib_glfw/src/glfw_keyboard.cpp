@@ -8,6 +8,12 @@ KeyState GlfwKeyboard::getKeyState(const Key key) const {
 }
 
 //  ----------------------------------------------------------------------------
+const std::string& GlfwKeyboard::getName() const {
+    static const std::string name = "Keyboard";
+    return name;
+}
+
+//  ----------------------------------------------------------------------------
 bool GlfwKeyboard::isDown(const Key key) const {
     const KeyState keyState = mKeyState.getState(key, KeyState::Released);
     return (

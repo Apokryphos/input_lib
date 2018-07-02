@@ -23,6 +23,12 @@ ButtonState GlfwMouse::getMiddleState() const {
 }
 
 //  ----------------------------------------------------------------------------
+const std::string& GlfwMouse::getName() const {
+    static const std::string name = "Mouse";
+    return name;
+}
+
+//  ----------------------------------------------------------------------------
 Point GlfwMouse::getPosition() {
     return mPosition;
 }

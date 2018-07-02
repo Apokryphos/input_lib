@@ -15,6 +15,7 @@ enum InputActionId
     Accept,
     Accelerate,
     Crouch,
+    MenuDown,
     MenuUp,
     MoveLeft,
     MoveRight,
@@ -22,9 +23,76 @@ enum InputActionId
 };
 
 //  ----------------------------------------------------------------------------
-static void error_callback(int error, const char* description)
-{
+static void error_callback(int error, const char* description) {
     std::cerr << "OpenGL Error: " << description << std::endl;
+}
+
+//  ----------------------------------------------------------------------------
+static std::string to_string(const InputActionId actionId) {
+    switch (actionId) {
+        case InputActionId::Accept:
+            return "Accept";
+        case InputActionId::Accelerate:
+            return "Accelerate";
+        case InputActionId::Crouch:
+            return "Crouch";
+        case InputActionId::MenuDown:
+            return "Menu Down";
+        case InputActionId::MenuUp:
+            return "Menu Up";
+        case InputActionId::MoveLeft:
+            return "Move Left";
+        case InputActionId::MoveRight:
+            return "Move Right";
+        case InputActionId::Quit:
+            return "Quit";
+        default:
+            return "?";
+    }
+}
+
+//  ----------------------------------------------------------------------------
+static void printAnalogAction(
+    const InputActionId actionId,
+    const ActionMap& actionMap,
+    const Device& device
+) {
+    if (actionMap.getDigitalValue(actionId, device)) {
+        std::cout <<
+            device.getName() << ": " <<
+            to_string(actionId) << " (" <<
+            actionMap.getAnalogValue(actionId, device) <<
+            ")" <<
+            std::endl;
+    }
+}
+
+//  ----------------------------------------------------------------------------
+static void printDigitalAction(
+    const InputActionId actionId,
+    const ActionMap& actionMap,
+    const Device& device
+) {
+    if (actionMap.getDigitalValue(actionId, device)) {
+        std::cout <<
+            device.getName() << ": " <<
+            to_string(actionId) <<
+            std::endl;
+    }
+}
+
+//  ----------------------------------------------------------------------------
+static void printPressedAction(
+    const InputActionId actionId,
+    const ActionMap& actionMap,
+    const Device& device
+) {
+    if (actionMap.isPressed(actionId, device)) {
+        std::cout <<
+            device.getName() << ": " <<
+            to_string(actionId) <<
+            std::endl;
+    }
 }
 
 //  ----------------------------------------------------------------------------
@@ -39,20 +107,22 @@ int main(void)
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-    window = glfwCreateWindow(320, 240, "InputLib Demo", NULL, NULL);
+    window = glfwCreateWindow(640, 480, "InputLib Demo", NULL, NULL);
 
     if (!window) {
         glfwTerminate();
         exit(EXIT_FAILURE);
     }
 
-    glfwSetKeyCallback(window, InputLib::keyboardCallback);
-    glfwSetJoystickCallback(InputLib::joystickCallback);
+    //  Set input callbacks
+    glfwSetKeyCallback(window, keyboardCallback);
+    glfwSetJoystickCallback(joystickCallback);
     glfwSetCursorPosCallback(window, mousePositionCallback);
     glfwSetMouseButtonCallback(window, mouseButtonCallback);
 
     glfwMakeContextCurrent(window);
 
+    //  glad
     if (!gladLoadGL()) {
         std::cerr << "Glad failed to initialize." << std::endl;
         glfwDestroyWindow(window);
@@ -77,16 +147,11 @@ int main(void)
     //  Keyboard mapping
     actionMap.map(InputActionId::Accept, Key::Enter);
     actionMap.map(InputActionId::Accelerate, Key::Space);
+    actionMap.map(InputActionId::MenuDown, Key::Down);
     actionMap.map(InputActionId::MenuUp, Key::Up);
     actionMap.map(InputActionId::MoveLeft, Key::A);
     actionMap.map(InputActionId::MoveRight, Key::E);
     actionMap.map(InputActionId::Quit, Key::Escape);
-
-    // actionMap.mapKeys(
-    //     InputActionId::MoveX,
-    //     Key::Left,
-    //     Key::Right
-    // );
 
     //  Mouse mapping
     actionMap.map(InputActionId::Accept, MouseButton::LeftButton);
@@ -96,6 +161,8 @@ int main(void)
     actionMap.map(InputActionId::Accept, Gamepad360::A_BUTTON);
     actionMap.map(InputActionId::Accelerate, Gamepad360::RIGHT_TRIGGER);
     actionMap.map(InputActionId::Crouch, Gamepad360::B_BUTTON);
+    actionMap.map(InputActionId::MenuDown, Gamepad360::DPAD_DOWN);
+    actionMap.map(InputActionId::MenuUp, Gamepad360::DPAD_UP);
     actionMap.map(
         InputActionId::MoveLeft,
         Gamepad360::LEFT_STICK_X,
@@ -108,62 +175,50 @@ int main(void)
     );
     actionMap.map(InputActionId::Quit, Gamepad360::BACK_BUTTON);
 
-    Point lastMousePosition;
-
+    //  Main loop
     while (!glfwWindowShouldClose(window)) {
         inputManager.update();
 
+        //  Display mouse position when it changes
+        static Point lastMousePosition;
         const Point mousePosition = mouse.getPosition();
         if (mousePosition != lastMousePosition) {
-            std::cout << "MOUSE " << to_string(mousePosition) << std::endl;
+            std::cout
+                << mouse.getName() << ": "
+                << to_string(mousePosition)
+                << std::endl;
             lastMousePosition = mousePosition;
         }
 
+        //  Display mouse left clicks
         if (mouse.isPressed(0)) {
-            std::cout << "MOUSE LEFT BUTTON" << std::endl;
+            std::cout
+                << mouse.getName() << ": "
+                << "Left Button"
+                << std::endl;
         }
 
+        //  Display activated input actions for each device
         for (const auto& d : devices) {
             const Device& device = *d;
 
             if (actionMap.getDigitalValue(InputActionId::Quit, device)) {
+                printDigitalAction(InputActionId::Quit, actionMap, device);
                 glfwSetWindowShouldClose(window, GLFW_TRUE);
             }
 
-            if (actionMap.isPressed(InputActionId::Accept, device)) {
-                std::cout << "ACCEPT" << std::endl;
-            }
+            printPressedAction(InputActionId::Accept, actionMap, device);
+            printPressedAction(InputActionId::MenuDown, actionMap, device);
+            printPressedAction(InputActionId::MenuUp, actionMap, device);
 
-            if (actionMap.getDigitalValue(InputActionId::Crouch, device)) {
-                std::cout << "CROUCH" << std::endl;
-            }
+            printDigitalAction(InputActionId::Crouch, actionMap, device);
 
-            if (actionMap.isPressed(InputActionId::MenuUp, device)) {
-                std::cout << "MENU UP" << std::endl;
-            }
-
-            // if (actionMap.getDigitalValue(InputActionId::Accelerate, device)) {
-            //     std::cout <<
-            //         "ACCELERATE X " <<
-            //         actionMap.getAnalogValue(InputActionId::Accelerate, device) <<
-            //         std::endl;
-            // }
-
-            if (actionMap.getDigitalValue(InputActionId::MoveLeft, device)) {
-                std::cout <<
-                    "MOVE LEFT " <<
-                    actionMap.getAnalogValue(InputActionId::MoveLeft, device) <<
-                    std::endl;
-            }
-
-            if (actionMap.getDigitalValue(InputActionId::MoveRight, device)) {
-                std::cout <<
-                    "MOVE RIGHT " <<
-                    actionMap.getAnalogValue(InputActionId::MoveRight, device) <<
-                    std::endl;
-            }
+            // printAnalogAction(InputActionId::Accelerate, actionMap, device);
+            printAnalogAction(InputActionId::MoveLeft, actionMap, device);
+            printAnalogAction(InputActionId::MoveRight, actionMap, device);
         }
 
+        //  Update window
         int width, height;
         glfwGetFramebufferSize(window, &width, &height);
         glViewport(0, 0, width, height);

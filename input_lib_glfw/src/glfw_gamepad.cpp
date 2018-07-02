@@ -12,7 +12,8 @@ static float applyDeadzone(const float value, const float deadzone) {
 //  ----------------------------------------------------------------------------
 GlfwGamepad::GlfwGamepad(int index)
 : mIndex(index),
-  mDeadzone(0.2f) {
+  mDeadzone(0.2f),
+  mName("Joystick" + std::to_string(mIndex + 1)) {
 }
 
 //  ----------------------------------------------------------------------------
@@ -29,6 +30,11 @@ float GlfwGamepad::getAxisValue(const unsigned axis) const {
 //  ----------------------------------------------------------------------------
 ButtonState GlfwGamepad::getButtonState(const unsigned button) const {
     return mButtonStateMap.getState(button, ButtonState::Up);
+}
+
+//  ----------------------------------------------------------------------------
+const std::string& GlfwGamepad::getName() const {
+    return mName;
 }
 
 //  ----------------------------------------------------------------------------

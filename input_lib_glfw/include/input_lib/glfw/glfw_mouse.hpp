@@ -15,6 +15,7 @@ public:
     ButtonStateMap& getButtonStateMap();
     virtual ButtonState getLeftButtonState() const override;
     virtual ButtonState getMiddleState() const override;
+    virtual const std::string& getName() const override;
     virtual Point getPosition() override;
     virtual ButtonState getRightButtonState() const override;
     virtual bool isDown(const unsigned button) const override;
