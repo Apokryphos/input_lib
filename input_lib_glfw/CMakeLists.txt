@@ -4,6 +4,14 @@ find_package(glfw3 REQUIRED)
 
 project(input_lib_glfw)
 
+set(HEADER_FILES
+    include/input_lib/glfw/glfw_gamepad.hpp
+    include/input_lib/glfw/glfw_input_manager.hpp
+    include/input_lib/glfw/glfw_key_map.hpp
+    include/input_lib/glfw/glfw_keyboard.hpp
+    include/input_lib/glfw/glfw_mouse.hpp
+)
+
 set(SOURCE_FILES
     src/glfw_gamepad.cpp
     src/glfw_input_manager.cpp
@@ -14,9 +22,31 @@ set(SOURCE_FILES
 
 add_library(${PROJECT_NAME} ${SOURCE_FILES})
 
+set_target_properties(${PROJECT_NAME} PROPERTIES
+    VERSION ${INPUT_LIB_VERSION}
+)
+
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 17)
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD_REQUIRED ON)
 
-target_include_directories(${PROJECT_NAME} PUBLIC include)
+set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER "${HEADER_FILES}")
 
-target_link_libraries(${PROJECT_NAME} glfw input_lib)
+target_include_directories(${PROJECT_NAME} PUBLIC
+    $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
+    $<INSTALL_INTERFACE:${input_lib_glfw_include_dest}>
+    $<INSTALL_INTERFACE:${input_lib_glfw_lib_dest}>
+)
+
+target_link_libraries(${PROJECT_NAME} PUBLIC glfw input_lib)
+
+install(
+    TARGETS ${PROJECT_NAME}
+    EXPORT ${PROJECT_NAME}
+    DESTINATION ${input_lib_glfw_lib_dest}
+    PUBLIC_HEADER DESTINATION ${input_lib_glfw_include_dest}/input_lib/glfw
+)
+
+#install(FILES ${PROJECT_NAME}-config.cmake DESTINATION ${input_lib_glfw_lib_main_dest})
+
+install(EXPORT ${PROJECT_NAME} DESTINATION "${input_lib_glfw_lib_dest}")
