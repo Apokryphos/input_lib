@@ -97,14 +97,17 @@ static void printAnalogAction(
     const float deadzoneAmount = 0.2f,
     DeadzonePointFilter deadzoneFilter = radialDeadzone
 ) {
+    //  Get analog values for all four axis ranges
     const float xp = actionMap.getAnalogValue(xPosActionId, device);
     const float xn = actionMap.getAnalogValue(xNegActionId, device);
     const float yp = actionMap.getAnalogValue(yPosActionId, device);
     const float yn = actionMap.getAnalogValue(yNegActionId, device);
 
+    //  Determine value for XY components from axis values
     const float x = xp > 0.0f ? xp : xn < 0.0f ? xn : 0.0f;
     const float y = yp > 0.0f ? yp : yn < 0.0f ? yn : 0.0f;
 
+    //  Apply deadzone
     Point p = deadzoneFilter(deadzoneAmount, x, y);
 
     if (p.x == 0.0f && p.y == 0.0f) {
@@ -299,10 +302,6 @@ int main(void)
                 actionMap,
                 device
             );
-            // printAnalogAction(InputActionId::MoveDown, actionMap, device);
-            // printAnalogAction(InputActionId::MoveUp, actionMap, device);
-            // printAnalogAction(InputActionId::MoveLeft, actionMap, device);
-            // printAnalogAction(InputActionId::MoveRight, actionMap, device);
         }
 
         //  Update window
