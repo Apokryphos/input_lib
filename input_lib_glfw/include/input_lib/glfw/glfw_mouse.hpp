@@ -8,7 +8,7 @@ namespace InputLib
 class GlfwMouse : public Mouse
 {
     float mScroll;
-    Point mPosition;
+    Coord mPosition;
     ButtonStateMap mButtonStateMap;
 
 public:
@@ -17,7 +17,7 @@ public:
     virtual ButtonState getLeftButtonState() const override;
     virtual ButtonState getMiddleButtonState() const override;
     virtual const std::string& getName() const override;
-    virtual Point getPosition() override;
+    virtual Coord getPosition() override;
     virtual ButtonState getRightButtonState() const override;
     virtual float getScroll() const override;
     virtual bool isDown(const unsigned button) const override;

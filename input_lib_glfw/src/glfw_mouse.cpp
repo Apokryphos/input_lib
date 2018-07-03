@@ -29,7 +29,7 @@ const std::string& GlfwMouse::getName() const {
 }
 
 //  ----------------------------------------------------------------------------
-Point GlfwMouse::getPosition() {
+Coord GlfwMouse::getPosition() {
     return mPosition;
 }
 

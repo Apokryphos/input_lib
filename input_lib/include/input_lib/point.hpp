@@ -4,10 +4,10 @@ namespace InputLib
 {
 struct Point
 {
-    int x;
-    int y;
+    float x;
+    float y;
 
-    Point(int x = 0, int y = 0)
+    Point(float x = 0, float y = 0)
     : x(x), y(y) {
     }
 };

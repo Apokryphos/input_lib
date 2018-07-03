@@ -1,8 +1,8 @@
 #pragma once
 
 #include "input_lib/button_state.hpp"
+#include "input_lib/coord.hpp"
 #include "input_lib/device.hpp"
-#include "input_lib/point.hpp"
 
 namespace InputLib
 {
@@ -17,7 +17,7 @@ public:
     virtual ButtonState getButtonState(const unsigned button) const = 0;
     virtual ButtonState getLeftButtonState() const = 0;
     virtual ButtonState getMiddleButtonState() const = 0;
-    virtual Point getPosition() = 0;
+    virtual Coord getPosition() = 0;
     virtual ButtonState getRightButtonState() const = 0;
     virtual float getScroll() const = 0;
     virtual bool isDown(const unsigned button) const = 0;

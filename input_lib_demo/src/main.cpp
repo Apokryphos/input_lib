@@ -1,5 +1,6 @@
 #include <glad/glad.h>
 #include "input_lib/action_map.hpp"
+#include "input_lib/deadzone.hpp"
 #include "input_lib/gamepad_360.hpp"
 #include "input_lib/to_string.hpp"
 #include "input_lib/glfw/glfw_input_manager.hpp"
@@ -17,8 +18,10 @@ enum InputActionId
     Crouch,
     MenuDown,
     MenuUp,
+    MoveDown,
     MoveLeft,
     MoveRight,
+    MoveUp,
     Quit,
 };
 
@@ -40,10 +43,14 @@ static std::string to_string(const InputActionId actionId) {
             return "Menu Down";
         case InputActionId::MenuUp:
             return "Menu Up";
+        case InputActionId::MoveDown:
+            return "Move Down";
         case InputActionId::MoveLeft:
             return "Move Left";
         case InputActionId::MoveRight:
             return "Move Right";
+        case InputActionId::MoveUp:
+            return "Move Up";
         case InputActionId::Quit:
             return "Quit";
         default:
@@ -55,16 +62,60 @@ static std::string to_string(const InputActionId actionId) {
 static void printAnalogAction(
     const InputActionId actionId,
     const ActionMap& actionMap,
-    const Device& device
+    const Device& device,
+    const float deadzoneAmount = 0.2f,
+    DeadzoneFloatFilter deadzoneFilter = basicDeadzone
 ) {
     if (actionMap.getDigitalValue(actionId, device)) {
+        const float value = deadzoneFilter(
+            deadzoneAmount,
+            actionMap.getAnalogValue(actionId, device)
+        );
+
+        if (value == 0.0f) {
+            return;
+        }
+
         std::cout <<
             device.getName() << ": " <<
             to_string(actionId) << " (" <<
-            actionMap.getAnalogValue(actionId, device) <<
+            value <<
             ")" <<
             std::endl;
     }
+}
+
+//  ----------------------------------------------------------------------------
+static void printAnalogAction(
+    const std::string& label,
+    const InputActionId xPosActionId,
+    const InputActionId xNegActionId,
+    const InputActionId yPosActionId,
+    const InputActionId yNegActionId,
+    const ActionMap& actionMap,
+    const Device& device,
+    const float deadzoneAmount = 0.2f,
+    DeadzonePointFilter deadzoneFilter = radialDeadzone
+) {
+    const float xp = actionMap.getAnalogValue(xPosActionId, device);
+    const float xn = actionMap.getAnalogValue(xNegActionId, device);
+    const float yp = actionMap.getAnalogValue(yPosActionId, device);
+    const float yn = actionMap.getAnalogValue(yNegActionId, device);
+
+    const float x = xp > 0.0f ? xp : xn < 0.0f ? xn : 0.0f;
+    const float y = yp > 0.0f ? yp : yn < 0.0f ? yn : 0.0f;
+
+    Point p = deadzoneFilter(deadzoneAmount, x, y);
+
+    if (p.x == 0.0f && p.y == 0.0f) {
+        return;
+    }
+
+    std::cout <<
+        device.getName() << ": " <<
+        label << " " <<
+        to_string(p) <<
+        std::endl;
 }
 
 //  ----------------------------------------------------------------------------
@@ -152,6 +203,8 @@ int main(void)
     actionMap.map(InputActionId::MenuUp, Key::Up);
     actionMap.map(InputActionId::MoveLeft, Key::A);
     actionMap.map(InputActionId::MoveRight, Key::E);
+    actionMap.map(InputActionId::MoveUp, Key::Comma);
+    actionMap.map(InputActionId::MoveDown, Key::O);
     actionMap.map(InputActionId::Quit, Key::Escape);
 
     //  Mouse mapping
@@ -164,6 +217,16 @@ int main(void)
     actionMap.map(InputActionId::Crouch, Gamepad360::B_BUTTON);
     actionMap.map(InputActionId::MenuDown, Gamepad360::DPAD_DOWN);
     actionMap.map(InputActionId::MenuUp, Gamepad360::DPAD_UP);
+    actionMap.map(
+        InputActionId::MoveUp,
+        Gamepad360::LEFT_STICK_Y,
+        AxisRange::Negative
+    );
+    actionMap.map(
+        InputActionId::MoveDown,
+        Gamepad360::LEFT_STICK_Y,
+        AxisRange::Positive
+    );
     actionMap.map(
         InputActionId::MoveLeft,
         Gamepad360::LEFT_STICK_X,
@@ -181,8 +244,8 @@ int main(void)
         inputManager.update();
 
         //  Display mouse position when it changes
-        static Point lastMousePosition;
-        const Point mousePosition = mouse.getPosition();
+        static Coord lastMousePosition;
+        const Coord mousePosition = mouse.getPosition();
         if (mousePosition != lastMousePosition) {
             std::cout
                 << mouse.getName() << ": Position "
@@ -192,9 +255,9 @@ int main(void)
         }
 
         //  Display mouse scroll when it changes
-        static Point lastMouseScroll;
-        const Point mouseScroll = mouse.getScroll();
-        if (mouseScroll != Point(0, 0)) {
+        static Coord lastMouseScroll;
+        const Coord mouseScroll = mouse.getScroll();
+        if (mouseScroll != Coord(0, 0)) {
             std::cout
                 << mouse.getName() << ": Scroll "
                 << to_string(mouseScroll)
@@ -226,8 +289,20 @@ int main(void)
             printDigitalAction(InputActionId::Crouch, actionMap, device);
 
             // printAnalogAction(InputActionId::Accelerate, actionMap, device);
-            printAnalogAction(InputActionId::MoveLeft, actionMap, device);
-            printAnalogAction(InputActionId::MoveRight, actionMap, device);
+
+            printAnalogAction(
+                "Move",
+                InputActionId::MoveDown,
+                InputActionId::MoveUp,
+                InputActionId::MoveRight,
+                InputActionId::MoveLeft,
+                actionMap,
+                device
+            );
+            // printAnalogAction(InputActionId::MoveDown, actionMap, device);
+            // printAnalogAction(InputActionId::MoveUp, actionMap, device);
+            // printAnalogAction(InputActionId::MoveLeft, actionMap, device);
+            // printAnalogAction(InputActionId::MoveRight, actionMap, device);
         }
 
         //  Update window

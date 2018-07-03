@@ -5,14 +5,8 @@
 namespace InputLib
 {
 //  ----------------------------------------------------------------------------
-static float applyDeadzone(const float value, const float deadzone) {
-    return std::abs(value) >= deadzone ? value : 0.0f;
-}
-
-//  ----------------------------------------------------------------------------
 GlfwGamepad::GlfwGamepad(int index)
 : mIndex(index),
-  mDeadzone(0.2f),
   mName("Joystick" + std::to_string(mIndex + 1)) {
 }
 
@@ -24,7 +18,7 @@ float GlfwGamepad::getAxisValue(const unsigned axis) const {
         return 0.0f;
     }
 
-    return applyDeadzone(find->second, mDeadzone);
+    return find->second;
 }
 
 //  ----------------------------------------------------------------------------

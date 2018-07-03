@@ -11,7 +11,6 @@ namespace InputLib
 class GlfwGamepad : public Gamepad
 {
     int mIndex;
-    float mDeadzone;
     std::map<unsigned, float> mAxisMap;
     ButtonStateMap mButtonStateMap;
     std::string mName;

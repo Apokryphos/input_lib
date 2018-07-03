@@ -1,5 +1,6 @@
 #pragma once
 
+#include "input_lib/coord.hpp"
 #include "input_lib/gamepad_axis.hpp"
 #include "input_lib/gamepad_button.hpp"
 #include "input_lib/key_state.hpp"
@@ -9,6 +10,14 @@
 
 namespace InputLib
 {
+inline static std::string to_string(const Coord& coord) {
+    return "(" +
+        std::to_string(coord.x) +
+        ", " +
+        std::to_string(coord.y) +
+        ")";
+}
+
 inline static std::string to_string(const GamepadAxis axis) {
     switch (axis) {
         case GamepadAxis::Axis1:
