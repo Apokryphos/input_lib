@@ -100,9 +100,10 @@ void ActionMap:: map(
 //  ----------------------------------------------------------------------------
 void ActionMap::map(
     const ActionId actionId,
-    const Key key
+    const Key key,
+    const float analogValue
 ) {
-    mKeyboardActionMap.map(actionId, key);
+    mKeyboardActionMap.map(actionId, key, analogValue);
 }
 
 //  ----------------------------------------------------------------------------

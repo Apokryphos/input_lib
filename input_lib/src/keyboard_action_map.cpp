@@ -17,7 +17,7 @@ float KeyboardActionMap::getAnalogValue(
 
     for (const auto& entry : entries) {
         if (keyboard.isDown(entry.key)) {
-            return 1.0f;
+            return entry.analogValue;
         }
     }
 
@@ -69,9 +69,14 @@ bool KeyboardActionMap::isPressed(
 }
 
 //  ----------------------------------------------------------------------------
-void KeyboardActionMap::map(const ActionId actionId, const Key key) {
+void KeyboardActionMap::map(
+    const ActionId actionId,
+    const Key key,
+    const float analogValue
+) {
     Entry entry = {};
     entry.key = key;
+    entry.analogValue = analogValue;
 
     mEntriesByActionId[actionId].push_back(entry);
 }

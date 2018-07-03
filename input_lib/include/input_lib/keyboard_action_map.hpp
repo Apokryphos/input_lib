@@ -13,6 +13,8 @@ class KeyboardActionMap
     struct Entry
     {
         Key key;
+        //  Analog value used when key is down
+        float analogValue;
     };
 
     std::map<ActionId, std::vector<Entry>> mEntriesByActionId;
@@ -30,6 +32,10 @@ public:
         const ActionId actionId,
         const Keyboard& keyboard
     ) const;
-    void map(const ActionId actionId, const Key key);
+    void map(
+        const ActionId actionId,
+        const Key key,
+        const float analogValue = 1.0f
+    );
 };
 }

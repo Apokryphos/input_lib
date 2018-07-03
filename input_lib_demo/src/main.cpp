@@ -88,10 +88,10 @@ static void printAnalogAction(
 //  ----------------------------------------------------------------------------
 static void printAnalogAction(
     const std::string& label,
-    const InputActionId xPosActionId,
     const InputActionId xNegActionId,
-    const InputActionId yPosActionId,
+    const InputActionId xPosActionId,
     const InputActionId yNegActionId,
+    const InputActionId yPosActionId,
     const ActionMap& actionMap,
     const Device& device,
     const float deadzoneAmount = 0.2f,
@@ -104,8 +104,8 @@ static void printAnalogAction(
     const float yn = actionMap.getAnalogValue(yNegActionId, device);
 
     //  Determine value for XY components from axis values
-    const float x = xp > 0.0f ? xp : xn < 0.0f ? xn : 0.0f;
-    const float y = yp > 0.0f ? yp : yn < 0.0f ? yn : 0.0f;
+    const float x = xp != 0.0f ? xp : xn != 0.0f ? xn : 0.0f;
+    const float y = yp != 0.0f ? yp : yn != 0.0f ? yn : 0.0f;
 
     //  Apply deadzone
     Point p = deadzoneFilter(deadzoneAmount, x, y);
@@ -204,9 +204,9 @@ int main(void)
     actionMap.map(InputActionId::Accelerate, Key::Space);
     actionMap.map(InputActionId::MenuDown, Key::Down);
     actionMap.map(InputActionId::MenuUp, Key::Up);
-    actionMap.map(InputActionId::MoveLeft, Key::A);
+    actionMap.map(InputActionId::MoveLeft, Key::A, -1.0f);
     actionMap.map(InputActionId::MoveRight, Key::E);
-    actionMap.map(InputActionId::MoveUp, Key::Comma);
+    actionMap.map(InputActionId::MoveUp, Key::Comma, -1.0f);
     actionMap.map(InputActionId::MoveDown, Key::O);
     actionMap.map(InputActionId::Quit, Key::Escape);
 
@@ -295,10 +295,10 @@ int main(void)
 
             printAnalogAction(
                 "Move",
-                InputActionId::MoveDown,
-                InputActionId::MoveUp,
-                InputActionId::MoveRight,
                 InputActionId::MoveLeft,
+                InputActionId::MoveRight,
+                InputActionId::MoveUp,
+                InputActionId::MoveDown,
                 actionMap,
                 device
             );

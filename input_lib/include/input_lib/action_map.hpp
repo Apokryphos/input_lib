@@ -33,7 +33,11 @@ public:
         const AxisRange axisRange = AxisRange::Full
     );
     void map(const ActionId actionId, const GamepadButton button);
-    void map(const ActionId actionId, const Key key);
+    void map(
+        const ActionId actionId,
+        const Key key,
+        const float analogValue = 1.0f
+    );
     void map(const ActionId actionId, const MouseButton button);
 };
 }
