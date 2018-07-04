@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.11)
 project(input_lib_demo)
 
 set(SOURCE_FILES
+    src/glfw.cpp
     src/main.cpp
 )
 

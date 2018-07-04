@@ -1,12 +1,9 @@
-#include <glad/glad.h>
+#include "glfw.hpp"
 #include "input_lib/action_map.hpp"
 #include "input_lib/deadzone.hpp"
 #include "input_lib/gamepad_360.hpp"
 #include "input_lib/to_string.hpp"
 #include "input_lib/glfw/glfw_input_manager.hpp"
-#include <GLFW/glfw3.h>
-#include <stdlib.h>
-#include <stdio.h>
 #include <iostream>
 
 using namespace InputLib;
@@ -24,11 +21,6 @@ enum InputActionId
     MoveUp,
     Quit,
 };
-
-//  ----------------------------------------------------------------------------
-static void error_callback(int error, const char* description) {
-    std::cerr << "OpenGL Error: " << description << std::endl;
-}
 
 //  ----------------------------------------------------------------------------
 static std::string to_string(const InputActionId actionId) {
@@ -150,23 +142,14 @@ static void printPressedAction(
 }
 
 //  ----------------------------------------------------------------------------
-int main(void)
-{
-    GLFWwindow* window;
-    glfwSetErrorCallback(error_callback);
+int main(void) {
+    GLFWwindow* window = initializeGlfw(640, 480);
 
-    if (!glfwInit()) {
+    if (window == NULL) {
         exit(EXIT_FAILURE);
     }
 
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-    window = glfwCreateWindow(640, 480, "InputLib Demo", NULL, NULL);
-
-    if (!window) {
-        glfwTerminate();
-        exit(EXIT_FAILURE);
-    }
+    GlfwInputManager inputManager;
 
     //  Set input callbacks
     glfwSetKeyCallback(window, keyboardCallback);
@@ -174,18 +157,6 @@ int main(void)
     glfwSetCursorPosCallback(window, mousePositionCallback);
     glfwSetMouseButtonCallback(window, mouseButtonCallback);
     glfwSetScrollCallback(window, scrollCallback);
-
-    glfwMakeContextCurrent(window);
-
-    //  glad
-    if (!gladLoadGL()) {
-        std::cerr << "Glad failed to initialize." << std::endl;
-        glfwDestroyWindow(window);
-        glfwTerminate();
-        throw std::runtime_error("GLAD failed to initialize.");
-    }
-
-    GlfwInputManager inputManager;
 
     auto& keyboard = inputManager.getKeyboard();
     auto& mouse = inputManager.getMouse();
@@ -310,15 +281,9 @@ int main(void)
             );
         }
 
-        //  Update window
-        int width, height;
-        glfwGetFramebufferSize(window, &width, &height);
-        glViewport(0, 0, width, height);
-        glClear(GL_COLOR_BUFFER_BIT);
-        glfwSwapBuffers(window);
+        updateWindow(window);
     }
 
-    glfwDestroyWindow(window);
-    glfwTerminate();
+    shutdownGlfw(window);
     exit(EXIT_SUCCESS);
 }
