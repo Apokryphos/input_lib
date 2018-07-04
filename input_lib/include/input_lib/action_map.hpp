@@ -30,7 +30,9 @@ public:
     void map(
         const ActionId actionId,
         const GamepadAxis axis,
-        const AxisRange axisRange = AxisRange::Full
+        const AxisRange axisRange = AxisRange::Full,
+        const float minAnalogValue = -1.0f,
+        const float maxAnalogValue = 1.0f
     );
     void map(const ActionId actionId, const GamepadButton button);
     void map(

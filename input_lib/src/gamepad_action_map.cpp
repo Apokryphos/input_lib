@@ -3,17 +3,35 @@
 namespace InputLib
 {
 //  ----------------------------------------------------------------------------
-static float getAxisValue(const float value, const AxisRange axisRange) {
+static float getAxisValue(
+    const float value,
+    const AxisRange axisRange,
+    const float minAnalogValue,
+    const float maxAnalogValue
+) {
+    float v;
+
     switch (axisRange) {
         case AxisRange::Full:
-            return value;
+            v = value;
+            break;
         case AxisRange::Positive:
-            return value > 0.0f ? value : 0.0f;
+            v = value > 0.0f ? value : 0.0f;
+            break;
         case AxisRange::Negative:
-            return value < 0.0f ? value : 0.0f;
+            v = value < 0.0f ? value : 0.0f;
+            break;
         default:
             throw std::runtime_error("Case not implemented.");
     }
+
+    const float inStart = -1.0f;
+    const float inEnd = 1.0f;
+
+    return
+        (v - inStart) / (inEnd - inStart)
+        * (maxAnalogValue - minAnalogValue)
+        + minAnalogValue;
 }
 
 //  ----------------------------------------------------------------------------
@@ -34,7 +52,9 @@ float GamepadActionMap::getAnalogValue(
             case InputType::Axis: {
                 const float value = getAxisValue(
                     gamepad.getAxisValue(entry.value),
-                    entry.axisRange
+                    entry.axisRange,
+                    entry.minAnalogValue,
+                    entry.maxAnalogValue
                 );
 
                 if (value != 0.0f) {
@@ -76,7 +96,9 @@ bool GamepadActionMap::getDigitalValue(
             case InputType::Axis: {
                 const float value = getAxisValue(
                     gamepad.getAxisValue(entry.value),
-                    entry.axisRange
+                    entry.axisRange,
+                    entry.minAnalogValue,
+                    entry.maxAnalogValue
                 );
 
                 if (value != 0.0f) {
@@ -136,11 +158,15 @@ bool GamepadActionMap::isPressed(
 void GamepadActionMap::map(
     const ActionId actionId,
     const GamepadAxis axis,
-    const AxisRange axisRange
+    const AxisRange axisRange,
+    const float minAnalogValue,
+    const float maxAnalogValue
 ) {
     Entry entry = {};
     entry.inputType = InputType::Axis;
     entry.axisRange = axisRange;
+    entry.minAnalogValue = std::min(minAnalogValue, maxAnalogValue);;
+    entry.maxAnalogValue = std::max(minAnalogValue, maxAnalogValue);
     entry.value = static_cast<unsigned>(axis);
 
     mEntriesByActionId[actionId].push_back(entry);

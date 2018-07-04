@@ -216,7 +216,13 @@ int main(void)
 
     //  Gamepad mapping
     actionMap.map(InputActionId::Accept, Gamepad360::A_BUTTON);
-    actionMap.map(InputActionId::Accelerate, Gamepad360::RIGHT_TRIGGER);
+    actionMap.map(
+        InputActionId::Accelerate,
+        Gamepad360::RIGHT_TRIGGER,
+        AxisRange::Full,
+        0.0f,
+        1.0f
+    );
     actionMap.map(InputActionId::Crouch, Gamepad360::B_BUTTON);
     actionMap.map(InputActionId::MenuDown, Gamepad360::DPAD_DOWN);
     actionMap.map(InputActionId::MenuUp, Gamepad360::DPAD_UP);
@@ -291,7 +297,7 @@ int main(void)
 
             printDigitalAction(InputActionId::Crouch, actionMap, device);
 
-            // printAnalogAction(InputActionId::Accelerate, actionMap, device);
+            printAnalogAction(InputActionId::Accelerate, actionMap, device);
 
             printAnalogAction(
                 "Move",
