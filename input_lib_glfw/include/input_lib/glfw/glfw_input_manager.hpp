@@ -47,5 +47,7 @@ void mousePositionCallback(
     double ypos
 );
 
+void registerGlfwCallbacks(GLFWwindow* window);
+
 void scrollCallback(GLFWwindow* window, double xoffset, double yoffset);
 }

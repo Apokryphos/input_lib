@@ -110,6 +110,15 @@ void scrollCallback(GLFWwindow* window, double xoffset, double yoffset) {
 }
 
 //  ----------------------------------------------------------------------------
+void registerGlfwCallbacks(GLFWwindow* window) {
+    glfwSetKeyCallback(window, keyboardCallback);
+    glfwSetJoystickCallback(joystickCallback);
+    glfwSetCursorPosCallback(window, mousePositionCallback);
+    glfwSetMouseButtonCallback(window, mouseButtonCallback);
+    glfwSetScrollCallback(window, scrollCallback);
+}
+
+//  ----------------------------------------------------------------------------
 GlfwInputManager::GlfwInputManager() {
     assert(sInputManager == nullptr);
     sInputManager = this;

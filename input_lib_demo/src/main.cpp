@@ -151,12 +151,7 @@ int main(void) {
 
     GlfwInputManager inputManager;
 
-    //  Set input callbacks
-    glfwSetKeyCallback(window, keyboardCallback);
-    glfwSetJoystickCallback(joystickCallback);
-    glfwSetCursorPosCallback(window, mousePositionCallback);
-    glfwSetMouseButtonCallback(window, mouseButtonCallback);
-    glfwSetScrollCallback(window, scrollCallback);
+    registerGlfwCallbacks(window);
 
     auto& keyboard = inputManager.getKeyboard();
     auto& mouse = inputManager.getMouse();
