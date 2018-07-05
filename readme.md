@@ -1,6 +1,6 @@
 # input_lib
 
-C++ input library. Supports GLFW.
+C++ input mapping library. Supports GLFW.
 
 See the [demo source](input_lib_demo/src/main.cpp) for usage examples.
 
@@ -124,6 +124,22 @@ actionMap.isPressed(InputActionId::Accept, device)  {
 }
 ```
 
+
+# GLFW
+
+```cpp
+//  Create InputManager instance
+GlfwInputManager inputManager;
+
+//  Register input callbacks
+registerGlfwCallbacks(window);
+
+//  Main loop
+while (!glfwWindowShouldClose(window)) {
+    //  Update InputManager (calls glfwPollEvents)
+    inputManager.update();
+}
+```
 
 ## GLFW Input Callbacks
 
