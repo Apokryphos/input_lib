@@ -46,13 +46,11 @@ Devices return axis values in the range of -1.0 to 1.0.
 
 When mapping an axis with ActionMap, you can specify the range of the axis to use (full, positive only, negative only) as well as the range of analog values to use instead of -1.0 and 1.0.
 
-AxisRange can be used to split an axis into two user action IDs (e.g. to assign the same gamepad stick to MoveLeft and MoveRight).
+AxisRange can be used to split an axis into two user-defined action IDs (e.g. to assign the same gamepad stick to MoveLeft and MoveRight action IDs).
 
 * AxisRange::Full - Returns values from -1.0 to 1.0
 * AxisRange::Positive - Returns values from 0.0 to 1.0
 * AxisRange::Negative - Returns values from 0.0 to -1.0
-
-After the analog value is queried from the device and clamped to the specified AxisRange, it will be scaled to the range specified by the minimum and maximum values.
 
 If an AxisRange other than Full is specified, the minimum and maximum values still specify the values across the full range of the axis. After the analog value is queried from the device and clamped to the specified AxisRange, it will be scaled to the range of values specified by the minimum and maximum.
 
