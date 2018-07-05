@@ -167,3 +167,23 @@ glfwSetScrollCallback(window, scrollCallback);
 ```
 
 You could also register your own callbacks and then call the InputLib callbacks when needed. This is useful with libraries like [Dear ImGUI](https://github.com/ocornut/imgui) that may capture input first.
+
+
+# CMake
+
+```shell
+mkdir build
+cd build
+cmake  ..
+make
+```
+
+Install is supported.
+
+```shell
+cmake -DCMAKE_BUILD_TYPE=Release ..
+make install
+
+cmake -DCMAKE_BUILD_TYPE=Debug ..
+make install
+```
