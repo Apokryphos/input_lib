@@ -116,7 +116,7 @@ actionMap.map(InputActionId::MoveUp, Key::Comma, -1.0f);
 bool crouch = actionMap.getDigitalValue(InputActionId::Crouch, device);
 
 //  Get an analog value
-float accelerate = actionMap.getAnalogValue(InputActionId::Accelerate);
+float accelerate = actionMap.getAnalogValue(InputActionId::Accelerate, device);
 
 //  Check if an input was pressed but not held
 actionMap.isPressed(InputActionId::Accept, device)  {
