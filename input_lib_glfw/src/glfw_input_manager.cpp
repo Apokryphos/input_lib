@@ -10,7 +10,12 @@
 namespace InputLib
 {
 static GlfwInputManager* sInputManager;
-static Bimap<Key, int> sKeyMap;
+
+//  ----------------------------------------------------------------------------
+static Bimap<Key, int>& getKeyMap() {
+    static Bimap<Key, int> keyMap;
+    return keyMap;
+}
 
 //  ----------------------------------------------------------------------------
 void joystickCallback(int joy, int event) {
@@ -33,7 +38,7 @@ static void updateButtonState(int glfwButton, const ButtonState buttonState) {
 static void updateKeyState(int glfwKey, const KeyState keyState) {
     auto& keyboard = sInputManager->getKeyboard();
     auto& keyStateMap = static_cast<GlfwKeyboard&>(keyboard).getKeyStateMap();
-    const Key key = sKeyMap.getKey(glfwKey, Key::None);
+    const Key key = getKeyMap().getKey(glfwKey, Key::None);
     keyStateMap.setState(key, keyState);
 }
 
@@ -122,7 +127,7 @@ void registerGlfwCallbacks(GLFWwindow* window) {
 GlfwInputManager::GlfwInputManager() {
     assert(sInputManager == nullptr);
     sInputManager = this;
-    initializeGlfwKeyMap(sKeyMap);
+    initializeGlfwKeyMap(getKeyMap());
 }
 
 //  ----------------------------------------------------------------------------
