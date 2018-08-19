@@ -13,6 +13,7 @@ enum class Key
     Escape,
     Left,
     LeftBracket,
+    LeftShift,
     Minus,
     Right,
     RightBracket,

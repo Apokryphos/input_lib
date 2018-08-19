@@ -15,6 +15,7 @@ void initializeGlfwKeyMap(Bimap<Key, int>& keyMap) {
     keyMap.map(Key::Escape, GLFW_KEY_ESCAPE);
     keyMap.map(Key::Left, GLFW_KEY_LEFT);
     keyMap.map(Key::LeftBracket, GLFW_KEY_LEFT_BRACKET);
+    keyMap.map(Key::LeftShift, GLFW_KEY_LEFT_SHIFT);
     keyMap.map(Key::Minus, GLFW_KEY_MINUS);
     keyMap.map(Key::Right, GLFW_KEY_RIGHT);
     keyMap.map(Key::RightBracket, GLFW_KEY_RIGHT_BRACKET);
