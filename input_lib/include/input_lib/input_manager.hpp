@@ -9,6 +9,7 @@ namespace InputLib
 class InputManager
 {
 public:
+    virtual ~InputManager() {}
     virtual Mouse& getMouse() = 0;
     virtual Gamepad& getGamepad(unsigned index) = 0;
     virtual Keyboard& getKeyboard() = 0;
