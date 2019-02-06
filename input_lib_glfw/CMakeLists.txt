@@ -38,7 +38,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     $<INSTALL_INTERFACE:${input_lib_glfw_lib_dest}>
 )
 
-target_link_libraries(${PROJECT_NAME} PUBLIC glfw input_lib)
+target_link_libraries(${PROJECT_NAME} PUBLIC ${CMAKE_DL_LIBS} glfw input_lib)
 
 install(
     TARGETS ${PROJECT_NAME}
